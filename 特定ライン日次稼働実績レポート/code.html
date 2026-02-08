@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>特定ライン日次稼働実績レポート | 製造VSMシステム</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-grid {
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex min-h-screen">
+<!-- Sidebar Selection -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary">factory</span>
+<h1 class="text-lg font-bold tracking-tight">製造VSMシステム</h1>
+</div>
+<p class="text-xs text-slate-500 uppercase font-semibold">工場管理パネル</p>
+</div>
+<div class="p-6 space-y-6 flex-1 overflow-y-auto">
+<!-- Date Picker Simulation -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">表示日付</label>
+<div class="relative">
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm pl-10 pr-4 py-2 focus:ring-primary focus:border-primary" type="text" value="2023/10/24"/>
+<span class="material-symbols-outlined absolute left-3 top-2 text-slate-400 text-sm">calendar_today</span>
+</div>
+</div>
+<!-- Line Selection -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">対象ライン</label>
+<select class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2 focus:ring-primary focus:border-primary">
+<option>組立メインライン A-101</option>
+<option>サブアッセンブリ B-202</option>
+<option>加工ライン C-303</option>
+</select>
+</div>
+<nav class="space-y-1">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-3">メインメニュー</p>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl">home</span>
+<span>ホーム</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>稼働実績レポート</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl">settings_input_component</span>
+<span>設備一覧</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl">build</span>
+<span>メンテナンス</span>
+</a>
+</nav>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="flex items-center gap-2 w-full px-3 py-2 text-sm text-slate-500 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span>ログアウト</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-8 py-4 flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+<span>分析レポート</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-200">ライン別日次実績</span>
+</div>
+<h2 class="text-xl font-bold">特定ライン日次稼働実績レポート <span class="text-slate-400 font-normal ml-2 text-sm">最終更新: 16:30</span></h2>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold rounded-lg flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">download</span>
+                        エクスポート
+                    </button>
+<button class="px-4 py-2 bg-primary text-white hover:bg-primary/90 text-sm font-semibold rounded-lg flex items-center gap-2 transition-all shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                        データ更新
+                    </button>
+</div>
+</header>
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+<!-- 1. 稼働概要 (Summary Cards) -->
+<section>
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">dashboard</span>
+                        稼働概要 (2023/10/24)
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Production Output -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<p class="text-sm font-medium text-slate-500">生産実績 / 計画</p>
+<span class="bg-red-50 text-red-600 text-xs px-2 py-1 rounded font-bold">-4.6%</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold">1,240</span>
+<span class="text-slate-400">/ 1,300 台</span>
+</div>
+<div class="mt-4 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 95.4%"></div>
+</div>
+</div>
+<!-- Card 2: Straight-through Rate -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-sm font-medium text-slate-500">平均直行率 (FTT)</p>
+<span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded font-bold">+0.5%</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold">96.5</span>
+<span class="text-slate-400 text-lg">%</span>
+</div>
+<div class="mt-4 flex gap-1">
+<div class="h-1 flex-1 bg-green-500 rounded-full"></div>
+<div class="h-1 flex-1 bg-green-500 rounded-full"></div>
+<div class="h-1 flex-1 bg-green-500 rounded-full"></div>
+<div class="h-1 flex-1 bg-slate-200 rounded-full"></div>
+</div>
+</div>
+<!-- Card 3: Financial Loss -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-sm font-medium text-slate-500">損失金額</p>
+<span class="bg-red-50 text-red-600 text-xs px-2 py-1 rounded font-bold">要注意</span>
+</div>
+<div class="flex items-baseline gap-2 text-red-500">
+<span class="text-lg">¥</span>
+<span class="text-3xl font-bold">124,500</span>
+</div>
+<p class="mt-4 text-xs text-slate-400">主要要因: マイナーストップ (42%)</p>
+</div>
+</div>
+</section>
+<!-- 2 & 3: Performance Trend Charts -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+<!-- Productivity & Tact Time -->
+<section class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-base font-bold">生産数・タクトタイム推移</h3>
+<div class="flex gap-4 text-[10px] font-bold uppercase tracking-wider">
+<span class="flex items-center gap-1"><i class="w-3 h-3 bg-primary rounded-sm"></i> 生産数</span>
+<span class="flex items-center gap-1"><i class="w-3 h-3 bg-red-400 rounded-sm"></i> ターゲット越え</span>
+<span class="flex items-center gap-1 text-primary border-b border-primary">―― タクトタイム</span>
+</div>
+</div>
+<div class="h-64 flex items-end gap-2 border-l border-b border-slate-100 px-2 relative">
+<!-- Chart Placeholder Bars -->
+<div class="flex-1 bg-primary h-2/3 rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-3/4 rounded-t-sm"></div>
+<div class="flex-1 bg-red-400 h-1/2 rounded-t-sm relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">ボトルネック発生</div>
+</div>
+<div class="flex-1 bg-primary h-4/5 rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-5/6 rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-2/3 rounded-t-sm"></div>
+<div class="flex-1 bg-red-400 h-1/2 rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-3/4 rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-full rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-4/5 rounded-t-sm"></div>
+<!-- Line Chart Overlay Path -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none">
+<path d="M0 160 Q 50 140 100 180 T 200 150 T 300 200 T 400 140 T 500 160" fill="none" stroke="#137fec" stroke-width="2"></path>
+<line stroke="#e11d48" stroke-dasharray="4" stroke-width="1" x1="0" x2="1000" y1="180" y2="180"></line>
+</svg>
+</div>
+<div class="flex justify-between mt-2 text-[10px] text-slate-400 font-medium">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span>
+</div>
+</section>
+<!-- WIP & Lead Time -->
+<section class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-base font-bold">仕掛品(WIP)・リードタイム推移</h3>
+<div class="flex gap-4 text-[10px] font-bold">
+<span class="text-slate-500">標準WIP: 200個</span>
+</div>
+</div>
+<div class="h-64 relative">
+<div class="absolute inset-0 bg-slate-50/50 dark:bg-slate-800/20 chart-grid rounded"></div>
+<svg class="w-full h-full relative z-0" preserveaspectratio="none" viewbox="0 0 400 200">
+<path d="M0 100 C 50 120, 100 80, 150 140 S 250 60, 300 110 S 350 130, 400 90" fill="none" stroke="#137fec" stroke-width="3"></path>
+<path d="M0 100 C 50 120, 100 80, 150 140 S 250 60, 300 110 S 350 130, 400 90 V200 H0 Z" fill="url(#grad1)" opacity="0.1"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#137fec;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#137fec;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between mt-2 text-[10px] text-slate-400 font-medium">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span>
+</div>
+</section>
+</div>
+<!-- 4. 損失要因分析 (Loss Factors) -->
+<section class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-base font-bold mb-6">損失要因分析 (Pareto)</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-semibold">
+<span>マイナーストップ (チョコ停)</span>
+<span>42.3% (¥52,600)</span>
+</div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 42.3%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-semibold">
+<span>型替え・段取り替え</span>
+<span>25.1% (¥31,250)</span>
+</div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary/80" style="width: 25.1%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-semibold">
+<span>品質不具合・手直し</span>
+<span>18.6% (¥23,150)</span>
+</div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary/60" style="width: 18.6%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-semibold">
+<span>設備故障・停止</span>
+<span>14.0% (¥17,500)</span>
+</div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary/40" style="width: 14.0%"></div>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/10">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined">psychology</span>
+<h4 class="text-sm font-bold">AI 要因インサイト</h4>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                チョコ停の主要因はコンベア搬送部の位置ずれ(センサー誤検知)です。14時台に集中して発生しており、周辺温度の上昇が影響している可能性があります。夕方の段取り替え時間が通常より12分超過しています。
+                            </p>
+<button class="mt-4 text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                                詳細な原因調査を開始 <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 5. イベントタイムライン (Event Timeline) -->
+<section class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-base font-bold">イベントタイムライン (マシンステータス)</h3>
+<div class="flex gap-4 text-[10px] font-bold">
+<span class="flex items-center gap-1"><i class="w-3 h-3 bg-green-500 rounded-full"></i> 稼働中</span>
+<span class="flex items-center gap-1"><i class="w-3 h-3 bg-red-500 rounded-full"></i> 停止</span>
+<span class="flex items-center gap-1"><i class="w-3 h-3 bg-slate-400 rounded-full"></i> メンテナンス</span>
+</div>
+</div>
+<div class="relative pt-6">
+<!-- Timeline Bar -->
+<div class="h-10 w-full flex rounded-lg overflow-hidden border border-slate-100 dark:border-slate-800">
+<div class="h-full bg-green-500" style="width: 25%" title="正常稼働"></div>
+<div class="h-full bg-red-500 border-x border-white/20" style="width: 5%" title="チョコ停"></div>
+<div class="h-full bg-green-500" style="width: 15%" title="正常稼働"></div>
+<div class="h-full bg-slate-400" style="width: 8%" title="定期点検"></div>
+<div class="h-full bg-green-500" style="width: 20%" title="正常稼働"></div>
+<div class="h-full bg-red-500" style="width: 7%" title="部材待ち"></div>
+<div class="h-full bg-green-500" style="width: 20%" title="正常稼働"></div>
+</div>
+<!-- Time Markers -->
+<div class="flex justify-between mt-3 text-[10px] text-slate-400 font-bold px-1">
+<span>08:00</span>
+<span>10:00</span>
+<span>12:00</span>
+<span>14:00</span>
+<span>16:00</span>
+<span>18:00</span>
+<span>20:00</span>
+</div>
+<!-- AI Generated Highlight / Annotations -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-lg">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">10:15 - 10:42</span>
+<span class="text-xs font-bold">モーター過熱検知</span>
+</div>
+<p class="text-[11px] text-slate-500 leading-tight">冷却ファンの目詰まりにより効率が15%低下。強制停止し簡易清掃を実施。</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-lg">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded">12:00 - 13:00</span>
+<span class="text-xs font-bold">昼休み・定期点検</span>
+</div>
+<p class="text-[11px] text-slate-500 leading-tight">計画通りの点検作業完了。消耗部品の交換を実施。異常なし。</p>
+</div>
+<div class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-lg">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">15:40 - 16:10</span>
+<span class="text-xs font-bold">部材供給遅延</span>
+</div>
+<p class="text-[11px] text-slate-500 leading-tight">AGVのバッテリー不足による停止。手動搬送への切り替えに時間を要した。</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Meta -->
+<footer class="p-8 text-center text-slate-400 text-xs border-t border-slate-200 dark:border-slate-800">
+                © 2023 Manufacturing VSM Systems Inc. | Data Visualization Dashboard V2.4
+            </footer>
+</main>
+</div>
+</body></html>

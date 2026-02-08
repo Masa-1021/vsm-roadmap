@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>工程詳細分析・AIレポート</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-gray-100 font-display min-h-screen overflow-x-hidden">
+<!-- Modal Backdrop / Layout Wrapper -->
+<div class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4 overflow-y-auto">
+<!-- Modal Content Container -->
+<div class="relative w-full max-w-[1200px] bg-white dark:bg-[#1a2632] rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] my-auto">
+<!-- Modal Header -->
+<div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-white dark:bg-[#1a2632] sticky top-0 z-10">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="text-xl font-bold leading-tight">工程詳細分析：工程3 (組立)</h2>
+<span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10 dark:bg-red-900/30 dark:text-red-400">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+                            稼働率低下 (遅延発生中)
+                        </span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">最終更新: 2023年10月27日 14:30 • 担当管理者: 山田 太郎</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-gray-500">share</span>
+</button>
+<button class="flex items-center justify-center h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-gray-500">close</span>
+</button>
+</div>
+</div>
+<!-- Modal Body - Scrollable -->
+<div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-[#101922]">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- AI Insight Section (Full Width or Top Prominent) -->
+<div class="lg:col-span-12">
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-blue-600 p-1 shadow-md">
+<div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 rounded-[10px] bg-white dark:bg-[#1a2632] p-6 h-full">
+<div class="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white">AI 分析レポート</h3>
+<span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300">New Insight</span>
+</div>
+<p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+<strong class="text-gray-900 dark:text-white">リードタイム延長の主な原因:</strong> 
+                                        過去24時間のデータ分析により、<span class="text-red-600 dark:text-red-400 font-medium">頻繁なチョコ停（平均15分間隔）</span>と特定シフトにおける<span class="text-red-600 dark:text-red-400 font-medium">作業者のスキル不足</span>との相関が高いことが検出されました。特に午後2時〜4時の間に効率低下が顕著です。
+                                    </p>
+<div class="mt-4 flex flex-wrap gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition-colors dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50">
+<span class="material-symbols-outlined text-[16px]">add_task</span>
+                                            改善タスクを作成
+                                        </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition-colors dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50">
+<span class="material-symbols-outlined text-[16px]">query_stats</span>
+                                            詳細データを確認
+                                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Left Column: Metrics & Charts -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Historical Loss Trend Chart -->
+<div class="bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">trending_up</span>
+                                    損失コスト推移 (過去30日)
+                                </h3>
+<select class="text-sm border-gray-300 rounded-md py-1 pr-8 text-gray-600 dark:bg-[#101922] dark:border-gray-600 dark:text-gray-300 focus:ring-primary focus:border-primary">
+<option>過去 30 日</option>
+<option>過去 7 日</option>
+<option>本日</option>
+</select>
+</div>
+<!-- Simulated Chart Area -->
+<div class="relative h-64 w-full bg-slate-50 dark:bg-[#101922] rounded-lg border border-slate-100 dark:border-slate-800 p-4 flex items-end gap-2 overflow-hidden">
+<!-- Grid Lines Background -->
+<div class="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-10">
+<div class="w-full h-px bg-slate-400"></div>
+<div class="w-full h-px bg-slate-400"></div>
+<div class="w-full h-px bg-slate-400"></div>
+<div class="w-full h-px bg-slate-400"></div>
+<div class="w-full h-px bg-slate-400"></div>
+</div>
+<!-- Chart Content (SVG Line) -->
+<svg class="absolute inset-0 w-full h-full p-4 overflow-visible" preserveaspectratio="none">
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#137fec;stop-opacity:0.2"></stop>
+<stop offset="100%" style="stop-color:#137fec;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<!-- Area -->
+<path class="text-primary fill-current opacity-50 w-full" d="M0,200 L20,190 L40,180 L60,195 L80,160 L100,150 L120,155 L140,130 L160,140 L180,110 L200,120 L220,90 L240,100 L260,80 L280,60 L300,70 L320,50 L340,60 L360,40 L380,50 L400,30 L420,40 L440,20 L460,30 L480,10 L500,20 L520,200 Z" fill="url(#gradient)" style="transform: scaleY(0.8) translateY(20px); transform-origin: bottom;"></path>
+<!-- Line -->
+<polyline fill="none" points="0,200 40,190 80,150 120,140 160,180 200,120 240,90 280,110 320,70 360,100 400,60 440,80 480,40 520,50 560,30 600,20" stroke="#137fec" stroke-width="3" vector-effect="non-scaling-stroke"></polyline>
+<!-- Highlight Points -->
+<circle cx="480" cy="40" fill="#fff" r="4" stroke="#137fec" stroke-width="2"></circle>
+<circle cx="560" cy="30" fill="#fff" r="4" stroke="#ef4444" stroke-width="2"></circle>
+</svg>
+<!-- X Axis Labels -->
+<div class="absolute bottom-1 left-4 right-4 flex justify-between text-[10px] text-gray-400">
+<span>10/01</span>
+<span>10/08</span>
+<span>10/15</span>
+<span>10/22</span>
+<span>Today</span>
+</div>
+</div>
+<div class="flex gap-4 mt-4 text-xs text-gray-500 justify-center">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span>通常損失</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-red-500"></span>
+<span>異常発生 (現在)</span>
+</div>
+</div>
+</div>
+<!-- Video / Standard Procedure -->
+<div class="bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex-1">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">ondemand_video</span>
+                                    標準作業手順書 (SOP) ビデオ
+                                </h3>
+<a class="text-sm text-primary hover:underline" href="#">すべて見る</a>
+</div>
+<div class="group relative w-full h-48 rounded-lg overflow-hidden bg-slate-900 cursor-pointer">
+<!-- Video Thumbnail -->
+<div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-60 transition-opacity" data-alt="Worker assembling electronic components on a production line" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAf3iDbvUvdCaVLujOBcyAJcSeN_fc5JtFAB_aV4xCNCt0deBa2bOGgRWPwUaUFAJ0VcC05YiyNoKLn6JclMNZP6cFEmRT2Uk6kmSmHQkfVEGz-e9D06b5xsfPyeMPPozLst-GqvcnMeyHSiIhw6yMX6QOMNPf86-tPrXuTnCfgRSpAZuzS6vw8oiuxEPnLtZzU0ru-gbVHUqW_vx7SnV08HEvgJzI_QCZ_rxMEJ4qUJtncoxpm6cWWj-OKaV-bCwOdpN8Hgem_Scs');"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-white text-4xl ml-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-sm font-medium">工程3：組立基本手順 v2.4</p>
+<p class="text-gray-300 text-xs">再生時間: 04:30 • 推奨確認箇所: 02:15~</p>
+</div>
+</div>
+<div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-900/50">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">info</span>
+<p class="text-xs text-blue-800 dark:text-blue-200">
+                                        AIの提案: 新人作業者に対して、2分15秒からの「コネクタ接合時の注意点」を重点的に教育することを推奨します。
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Skill Matrix -->
+<div class="lg:col-span-5 flex flex-col h-full">
+<div class="bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full">
+<div class="p-5 border-b border-slate-100 dark:border-slate-700">
+<h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">group</span>
+                                    スキルマップ (現在担当者)
+                                </h3>
+<p class="text-xs text-gray-500 mt-1">現在のシフト担当者のスキルレベル評価</p>
+</div>
+<div class="flex-1 overflow-x-auto p-2">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<th class="py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">作業者名</th>
+<th class="py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">組立速度</th>
+<th class="py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">正確性</th>
+<th class="py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">保守</th>
+<th class="py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">評価</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-xs">
+                                                        田
+                                                    </div>
+<div>
+<p class="text-sm font-medium text-gray-900 dark:text-white">田中 健一</p>
+<p class="text-[10px] text-gray-500">リーダー</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+<span class="material-symbols-outlined text-sm">star</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+<span class="material-symbols-outlined text-sm">circle</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
+<span class="material-symbols-outlined text-sm">change_history</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900/30 dark:text-green-400">A</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-red-50/50 dark:bg-red-900/10">
+<td class="py-3 px-3">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-700 dark:text-orange-300 font-bold text-xs">
+                                                        鈴
+                                                    </div>
+<div>
+<p class="text-sm font-medium text-gray-900 dark:text-white">鈴木 一郎</p>
+<p class="text-[10px] text-gray-500">新人</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+<span class="material-symbols-outlined text-sm">close</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
+<span class="material-symbols-outlined text-sm">change_history</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+<span class="material-symbols-outlined text-sm">close</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20 dark:bg-red-900/30 dark:text-red-400">C</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center text-pink-700 dark:text-pink-300 font-bold text-xs">
+                                                        佐
+                                                    </div>
+<div>
+<p class="text-sm font-medium text-gray-900 dark:text-white">佐藤 花子</p>
+<p class="text-[10px] text-gray-500">一般</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+<span class="material-symbols-outlined text-sm">circle</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+<span class="material-symbols-outlined text-sm">circle</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+<span class="material-symbols-outlined text-sm">circle</span>
+</span>
+</td>
+<td class="py-3 px-3 text-center">
+<span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/20 dark:bg-blue-900/30 dark:text-blue-400">B</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-[#15202b] rounded-b-xl">
+<h4 class="text-xs font-semibold text-gray-500 mb-2 uppercase">凡例</h4>
+<div class="flex flex-wrap gap-4 text-xs text-gray-600 dark:text-gray-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-600">star</span> 熟練
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-600">circle</span> 標準
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-yellow-600">change_history</span> 要指導
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-red-600">close</span> 未熟
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 bg-white dark:bg-[#1a2632] border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-sm text-gray-500">
+<span class="material-symbols-outlined text-gray-400">help</span>
+<span>AIによる分析は過去のトレンドに基づいています。</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        閉じる
+                    </button>
+<button class="flex-1 sm:flex-none px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">assignment_ind</span>
+                        教育を割り当て
+                    </button>
+<button class="flex-1 sm:flex-none px-4 py-2 bg-primary hover:bg-blue-600 text-white rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">support_agent</span>
+                        管理者に連絡
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

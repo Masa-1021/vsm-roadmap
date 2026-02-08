@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>デジタル生産日報・引継ぎ報告</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 md:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined">factory</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">デジタル生産管理システム</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">生産日報</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-500" href="#">稼働状況</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-500" href="#">在庫管理</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-500" href="#">設備保守</a>
+</nav>
+<div class="flex gap-2 border-l border-slate-200 dark:border-slate-800 pl-6">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 px-4 md:px-10 py-8 max-w-[1280px] mx-auto w-full">
+<!-- Page Title Section -->
+<div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span>2023年10月27日 (金)</span>
+</div>
+<h1 class="text-3xl font-black leading-tight tracking-tight">生産日報 (ラインA)</h1>
+<p class="text-slate-500 text-base font-normal">シフト区分: 昼礼シフト (08:00 - 17:00)</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold gap-2">
+<span class="material-symbols-outlined">download</span>
+<span>CSV出力</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">send</span>
+<span>レポート提出</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<!-- Section 1: PPH Table (Left/Center) -->
+<div class="xl:col-span-2 space-y-6">
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                                    機種別計画実績 (PPH)
+                                </h2>
+<span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Hourly Production</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase">機種名</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase">計画</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase">実績</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase">進捗率</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase">PPH</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase text-center">ステータス</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold">Model-X100</td>
+<td class="px-6 py-4 text-sm">500</td>
+<td class="px-6 py-4 text-sm">420</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+<div class="bg-red-500 h-full" style="width: 84%;"></div>
+</div>
+<span class="text-sm font-medium text-red-600">84%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-mono">42.0</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                                    低生産性
+                                                </span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold">Model-Y200</td>
+<td class="px-6 py-4 text-sm">300</td>
+<td class="px-6 py-4 text-sm">310</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+<div class="bg-primary h-full" style="width: 100%;"></div>
+</div>
+<span class="text-sm font-medium text-primary">103%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-mono">31.0</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                    正常
+                                                </span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold">Model-Z500</td>
+<td class="px-6 py-4 text-sm">200</td>
+<td class="px-6 py-4 text-sm">195</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+<div class="bg-primary h-full" style="width: 97%;"></div>
+</div>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">97%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-mono">20.5</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                    正常
+                                                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 2: Trouble Log -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500">warning</span>
+                                    トラブル記録 (Trouble Log)
+                                </h2>
+<button class="text-xs font-bold text-primary hover:underline">新規追加</button>
+</div>
+<div class="p-6">
+<div class="space-y-4">
+<!-- Log Entry 1 -->
+<div class="flex gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border-l-4 border-amber-500">
+<div class="flex-shrink-0">
+<p class="text-xs font-bold text-slate-500">10:15 - 10:45</p>
+<p class="text-lg font-black text-slate-700 dark:text-slate-300">30分</p>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-bold uppercase">設備故障</span>
+<h3 class="font-bold text-sm">搬送コンベア停止</h3>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+<span class="font-semibold text-slate-700 dark:text-slate-200">原因:</span> モーター過熱による保護回路作動。<br/>
+<span class="font-semibold text-slate-700 dark:text-slate-200">処置:</span> 冷却ファン清掃およびリセット実施。保全課へ報告済み。
+                                            </p>
+</div>
+</div>
+<!-- Log Entry 2 -->
+<div class="flex gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border-l-4 border-slate-300 dark:border-slate-600">
+<div class="flex-shrink-0">
+<p class="text-xs font-bold text-slate-500">14:00 - 14:10</p>
+<p class="text-lg font-black text-slate-700 dark:text-slate-300">10分</p>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold uppercase">部材欠品</span>
+<h3 class="font-bold text-sm">ネジ供給待ち</h3>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+<span class="font-semibold text-slate-700 dark:text-slate-200">原因:</span> ピッキングミスによる在庫切れ。<br/>
+<span class="font-semibold text-slate-700 dark:text-slate-200">処置:</span> 倉庫へ緊急出庫依頼。次工程より応援。
+                                            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar Sections -->
+<div class="space-y-6">
+<!-- Section 3: Staffing -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">groups</span>
+                                    人員配置 (Staffing)
+                                </h2>
+</div>
+<div class="p-4 space-y-3">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-2">組立工程 (Assembly)</p>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium">佐藤 健二 (リーダー)</span>
+<span class="text-xs text-slate-500">08:00 - 17:00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm">鈴木 美穂</span>
+<span class="text-xs text-slate-500">08:00 - 17:00</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-2">検査工程 (Inspection)</p>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm">高橋 誠</span>
+<span class="text-xs text-slate-500">08:00 - 17:00</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-2">梱包工程 (Packing)</p>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm">田中 太郎</span>
+<span class="text-xs text-slate-500">08:00 - 17:00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Handover -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forum</span>
+                                    昼夜引継ぎ報告
+                                </h2>
+</div>
+<div class="p-6">
+<label class="block text-xs font-bold text-slate-500 uppercase mb-2">夜礼シフトへの伝達事項</label>
+<textarea class="w-full h-40 rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary focus:ring-primary text-sm p-3 placeholder:text-slate-400" placeholder="引継ぎ内容を入力してください...">本日のコンベア停止の影響で、Model-X100の完了予定分が10台未完了です。
+夜勤の冒頭で優先的に対応をお願いします。
+また、治具の予備が1つ消耗しているため、明日朝の点検をお願いします。</textarea>
+<div class="mt-4 flex items-center gap-3">
+<div class="flex items-center gap-2">
+<input class="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" id="urgent" type="checkbox"/>
+<label class="text-xs font-bold text-red-600" for="urgent">至急対応が必要</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Mini Stats Chart (Generic Placeholder) -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-blue-700 p-6 text-white shadow-lg">
+<div class="relative z-10">
+<p class="text-xs font-bold opacity-80 uppercase tracking-wider">Overall Efficiency</p>
+<h3 class="text-3xl font-black">92.4%</h3>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>前日比 +1.2%</span>
+</div>
+</div>
+<div class="absolute right-[-20px] bottom-[-20px] opacity-20">
+<span class="material-symbols-outlined text-9xl">equalizer</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Section -->
+<footer class="mt-12 border-t border-slate-200 dark:border-slate-800 px-10 py-6 text-center text-slate-400 text-xs">
+<p>© 2023 Digital Production Management System. All Rights Reserved.</p>
+</footer>
+</div>
+</div>
+</body></html>

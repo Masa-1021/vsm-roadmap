@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manufacturing VSM Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "secondary": "#64748b",
+                        "success": "#22c55e",
+                        "warning": "#eab308",
+                        "danger": "#ef4444",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "sans": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        /* Hide scrollbar for clean look on dashboards */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden h-screen flex flex-col">
+<div class="flex flex-1 h-full overflow-hidden">
+<!-- Left Sidebar: Navigation -->
+<aside class="w-20 lg:w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between shrink-0 transition-all duration-300 z-20">
+<div class="flex flex-col h-full">
+<!-- User Profile -->
+<div class="p-4 border-b border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-600 flex-shrink-0 overflow-hidden relative">
+<img alt="Factory operator profile picture" class="object-cover w-full h-full" data-alt="Factory operator profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqxy7clw5lSmwNFNQs7W_Ldk256xq0XXFGPeWbBKlzHV-UoiodmwDIEtL8St5fXyOXmd6_qxvqXzNfgVbOc_cHRBiwPIBS6PnLuwv-uIjVYX2NuIQL2Sw0eEqme5i-Z7noMysB9rKyni2Q57h9NEsUV6sdgEiUo6r3utnh_V1R-5YFZ4QcBb74KoYzB4iWz7ckzPCgYw7ye_9opl5xvQLzLtn-CQ8KfXLO0U8zI1XuFWmvcPNggYU0Utta8w2ekop2HT6a3-mcoaw"/>
+</div>
+<div class="hidden lg:flex flex-col overflow-hidden">
+<h2 class="text-sm font-bold truncate text-slate-900 dark:text-white">製造ラインA</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">オペレーター</p>
+</div>
+</div>
+</div>
+<!-- Nav Items -->
+<nav class="flex-1 flex flex-col gap-2 p-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary">home</span>
+<span class="hidden lg:block text-sm font-medium">ホーム</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/10 text-primary dark:text-blue-400 border-l-4 border-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">factory</span>
+<span class="hidden lg:block text-sm font-bold">現場モード</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary">bar_chart</span>
+<span class="hidden lg:block text-sm font-medium">管理者モード</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary">settings</span>
+<span class="hidden lg:block text-sm font-medium">設定</span>
+</a>
+</nav>
+<!-- Logout -->
+<div class="p-4">
+<button class="w-full flex items-center justify-center gap-2 lg:px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="hidden lg:block text-sm font-bold">ログアウト</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden bg-slate-50 dark:bg-slate-900">
+<!-- Header -->
+<header class="bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center shadow-sm z-10 shrink-0">
+<div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+                        製造ラインVSMリアルタイム監視
+                    </h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">2023年10月27日 14:30 | 稼働状況: <span class="text-success font-bold">順調</span></p>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-xs text-slate-500 font-bold uppercase tracking-wider">サイクルタイム目標</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white">60.0s</span>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700"></div>
+<div class="flex flex-col items-end">
+<span class="text-xs text-slate-500 font-bold uppercase tracking-wider">直行率</span>
+<span class="text-xl font-bold text-primary">98.5%</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Center: VSM Map -->
+<div class="flex-1 overflow-x-auto overflow-y-auto p-6 lg:p-10 relative">
+<!-- VSM Flow Container -->
+<div class="flex items-start min-w-[1000px] h-full gap-2 pt-8">
+<!-- Step 1: Press -->
+<div class="flex flex-col items-center gap-4 group">
+<!-- Card -->
+<div class="w-72 bg-white dark:bg-surface-dark rounded-xl shadow-lg border-l-8 border-success p-5 relative overflow-hidden transition-transform hover:-translate-y-1">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-8xl">compress</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<h3 class="text-lg font-bold text-slate-800 dark:text-white">プレス工程</h3>
+<span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                        稼働中
+                                    </span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4 relative z-10">
+<div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+<p class="text-xs text-slate-500 mb-1">目標タクト</p>
+<p class="text-2xl font-bold text-slate-700 dark:text-slate-300">60<span class="text-sm font-normal">s</span></p>
+</div>
+<div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-100 dark:border-green-800/30">
+<p class="text-xs text-green-600 dark:text-green-400 mb-1">実績タクト</p>
+<p class="text-2xl font-bold text-green-700 dark:text-green-400">58<span class="text-sm font-normal">s</span></p>
+</div>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mb-2">
+<div class="bg-success h-1.5 rounded-full" style="width: 95%"></div>
+</div>
+<div class="flex justify-between text-xs text-slate-400">
+<span>稼働率</span>
+<span>95%</span>
+</div>
+</div>
+<!-- Connection Arrow -->
+<div class="h-20 flex flex-col items-center justify-center text-slate-400 relative w-full">
+<div class="absolute h-full w-0.5 bg-slate-300 dark:bg-slate-600 -z-10 top-0"></div>
+</div>
+</div>
+<!-- Arrow & WIP 1 -->
+<div class="flex flex-col justify-start items-center h-full pt-16 px-2 w-48 shrink-0">
+<!-- Arrow -->
+<div class="relative w-full h-16 flex items-center justify-center mb-6">
+<div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent w-1/2 animate-[shimmer_2s_infinite]"></div>
+</div>
+<div class="absolute right-0 -mr-1 w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-slate-200 dark:border-l-slate-700 border-b-[12px] border-b-transparent"></div>
+<span class="absolute -top-8 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">次工程受入可</span>
+</div>
+<!-- WIP Indicator -->
+<div class="w-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-lg p-3 shadow-sm flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-slate-500 uppercase">仕掛品 (WIP)</span>
+<span class="text-sm font-bold text-primary">15個</span>
+</div>
+<div class="flex gap-1 h-8 items-end">
+<div class="w-1/5 bg-primary/20 h-full rounded-sm"></div>
+<div class="w-1/5 bg-primary/40 h-full rounded-sm"></div>
+<div class="w-1/5 bg-primary h-full rounded-sm"></div>
+<div class="w-1/5 bg-slate-100 dark:bg-slate-800 h-full rounded-sm"></div>
+<div class="w-1/5 bg-slate-100 dark:bg-slate-800 h-full rounded-sm"></div>
+</div>
+<div class="text-[10px] text-center text-slate-400">適正在庫</div>
+</div>
+</div>
+<!-- Step 2: Assembly -->
+<div class="flex flex-col items-center gap-4 group">
+<!-- Card -->
+<div class="w-72 bg-white dark:bg-surface-dark rounded-xl shadow-lg border-l-8 border-warning p-5 relative overflow-hidden transition-transform hover:-translate-y-1 ring-4 ring-warning/10">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-8xl">handyman</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<h3 class="text-lg font-bold text-slate-800 dark:text-white">組立工程</h3>
+<span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">build</span>
+                                        段取替中
+                                    </span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4 relative z-10">
+<div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+<p class="text-xs text-slate-500 mb-1">目標タクト</p>
+<p class="text-2xl font-bold text-slate-700 dark:text-slate-300">90<span class="text-sm font-normal">s</span></p>
+</div>
+<div class="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-100 dark:border-yellow-800/30">
+<p class="text-xs text-yellow-600 dark:text-yellow-400 mb-1">実績タクト</p>
+<p class="text-2xl font-bold text-yellow-700 dark:text-yellow-400">--<span class="text-sm font-normal">s</span></p>
+</div>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mb-2">
+<div class="bg-warning h-1.5 rounded-full" style="width: 0%"></div>
+</div>
+<div class="flex justify-between text-xs text-slate-400">
+<span>稼働率</span>
+<span>停止中</span>
+</div>
+</div>
+<!-- Connection Arrow -->
+<div class="h-20 flex flex-col items-center justify-center text-slate-400 relative w-full">
+<div class="absolute h-full w-0.5 bg-slate-300 dark:bg-slate-600 -z-10 top-0"></div>
+</div>
+</div>
+<!-- Arrow & WIP 2 -->
+<div class="flex flex-col justify-start items-center h-full pt-16 px-2 w-48 shrink-0">
+<!-- Arrow -->
+<div class="relative w-full h-16 flex items-center justify-center mb-6">
+<div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-full relative overflow-hidden"></div>
+<div class="absolute right-0 -mr-1 w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-slate-200 dark:border-l-slate-700 border-b-[12px] border-b-transparent"></div>
+<span class="absolute -top-8 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded border border-red-100 dark:border-red-800">満杯 (FULL)</span>
+</div>
+<!-- WIP Indicator -->
+<div class="w-full bg-white dark:bg-surface-dark border border-red-200 dark:border-red-900/50 rounded-lg p-3 shadow-sm flex flex-col gap-2 ring-2 ring-red-100 dark:ring-red-900/20">
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-slate-500 uppercase">仕掛品 (WIP)</span>
+<span class="text-sm font-bold text-danger">42個</span>
+</div>
+<div class="flex gap-1 h-8 items-end">
+<div class="w-1/5 bg-red-500 h-full rounded-sm"></div>
+<div class="w-1/5 bg-red-500 h-full rounded-sm"></div>
+<div class="w-1/5 bg-red-500 h-full rounded-sm"></div>
+<div class="w-1/5 bg-red-500 h-full rounded-sm"></div>
+<div class="w-1/5 bg-red-400 h-[60%] rounded-sm"></div>
+</div>
+<div class="text-[10px] text-center text-red-500 font-bold">在庫過多</div>
+</div>
+</div>
+<!-- Step 3: Inspection -->
+<div class="flex flex-col items-center gap-4 group">
+<!-- Card -->
+<div class="w-72 bg-white dark:bg-surface-dark rounded-xl shadow-lg border-l-8 border-danger p-5 relative overflow-hidden transition-transform hover:-translate-y-1">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-8xl">flaky</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<h3 class="text-lg font-bold text-slate-800 dark:text-white">検査工程</h3>
+<span class="px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">error</span>
+                                        異常停止
+                                    </span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4 relative z-10">
+<div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+<p class="text-xs text-slate-500 mb-1">目標タクト</p>
+<p class="text-2xl font-bold text-slate-700 dark:text-slate-300">45<span class="text-sm font-normal">s</span></p>
+</div>
+<div class="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-100 dark:border-red-800/30">
+<p class="text-xs text-red-600 dark:text-red-400 mb-1">実績タクト</p>
+<p class="text-2xl font-bold text-red-700 dark:text-red-400">0<span class="text-sm font-normal">s</span></p>
+</div>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mb-2">
+<div class="bg-danger h-1.5 rounded-full" style="width: 0%"></div>
+</div>
+<div class="flex justify-between text-xs text-slate-400">
+<span>稼働率</span>
+<span>停止中</span>
+</div>
+</div>
+<!-- Connection Arrow -->
+<div class="h-20 flex flex-col items-center justify-center text-slate-400 relative w-full">
+<div class="absolute h-full w-0.5 bg-slate-300 dark:bg-slate-600 -z-10 top-0"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Alerts -->
+<aside class="w-80 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 flex flex-col shadow-xl z-10">
+<div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
+<h2 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+                            My Alert (現場通知)
+                        </h2>
+<span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+<!-- Alert Item: Critical -->
+<div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 flex gap-3 animate-pulse">
+<span class="material-symbols-outlined text-red-600 dark:text-red-400 mt-0.5">warning</span>
+<div>
+<h4 class="text-sm font-bold text-red-800 dark:text-red-300 mb-1">段取り替えまであと10分</h4>
+<p class="text-xs text-red-600 dark:text-red-400 leading-relaxed">次のロット（品番: B-202）のため、治具Aを準備してください。</p>
+<span class="text-[10px] text-red-500 mt-2 block font-medium">14:35 受信</span>
+</div>
+</div>
+<!-- Alert Item: Warning -->
+<div class="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30 flex gap-3">
+<span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 mt-0.5">inventory_2</span>
+<div>
+<h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-300 mb-1">部品補充要請</h4>
+<p class="text-xs text-yellow-700 dark:text-yellow-400 leading-relaxed">組立工程のボルトM4在庫が低下しています。</p>
+<span class="text-[10px] text-yellow-600 mt-2 block font-medium">14:15 受信</span>
+</div>
+</div>
+<!-- Alert Item: Info -->
+<div class="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 flex gap-3">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400 mt-0.5">schedule</span>
+<div>
+<h4 class="text-sm font-bold text-blue-800 dark:text-blue-300 mb-1">休憩時間変更のお知らせ</h4>
+<p class="text-xs text-blue-700 dark:text-blue-400 leading-relaxed">本日の午後休憩は15:15からに変更になります。</p>
+<span class="text-[10px] text-blue-600 mt-2 block font-medium">13:00 受信</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Area -->
+<div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+<button class="w-full py-2 bg-white dark:bg-surface-dark border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors mb-2">
+                            対応完了報告
+                        </button>
+<button class="w-full py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20">
+                            アンドン呼び出し (呼出)
+                        </button>
+</div>
+</aside>
+</div>
+<!-- Footer: Production Status -->
+<footer class="bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-700 p-4 shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-4 md:gap-8 items-center">
+<div class="flex items-center gap-4 min-w-[200px]">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl">trending_up</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold">本日の生産数</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">455</span>
+<span class="text-sm text-slate-400">/ 800個</span>
+</div>
+</div>
+</div>
+<div class="flex-1 w-full">
+<div class="flex justify-between text-xs font-bold text-slate-500 mb-1.5">
+<span>進捗率 57%</span>
+<span class="text-success">+12個 (ペース良)</span>
+</div>
+<div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative">
+<!-- Target Marker (Example at 60%) -->
+<div class="absolute top-0 bottom-0 w-0.5 bg-black dark:bg-white z-10 opacity-50" style="left: 60%"></div>
+<!-- Progress -->
+<div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full relative" style="width: 57%">
+<div class="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-r from-transparent to-white/30 skew-x-12"></div>
+</div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400 mt-1">
+<span>08:00 開始</span>
+<span>18:00 終了予定</span>
+</div>
+</div>
+<div class="hidden lg:flex items-center gap-6 border-l border-slate-200 dark:border-slate-700 pl-6">
+<div class="text-center">
+<p class="text-xs text-slate-500 mb-1">直近1時間</p>
+<p class="text-lg font-bold text-slate-800 dark:text-white">85個</p>
+</div>
+<div class="text-center">
+<p class="text-xs text-slate-500 mb-1">不良数</p>
+<p class="text-lg font-bold text-red-500">2個</p>
+</div>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- Tailwind Config to allow custom animations -->
+<style>
+        @keyframes shimmer {
+            0% { transform: translateX(-150%); }
+            100% { transform: translateX(150%); }
+        }
+    </style>
+</body></html>

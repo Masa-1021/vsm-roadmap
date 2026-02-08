@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>製造ラインVSMダッシュボード（生産技術モード）</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ea5e9","primary-light": "#e0f2fe",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "danger": "#ef4444",
+                        "warning": "#f59e0b",
+                        "success": "#10b981",
+                        "surface": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }.no-scrollbar {
+            -ms-overflow-style: none;scrollbar-width: none;}
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 flex h-screen overflow-hidden">
+<aside class="w-64 bg-surface dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-soft h-full flex-shrink-0">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-6">
+<div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                ST
+            </div>
+<div>
+<h2 class="text-sm font-bold text-slate-900 dark:text-white">佐藤 健太</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400">生産技術 (Engineer)</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">表示モード</label>
+<div class="flex flex-col gap-2 bg-slate-50 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+<button class="flex items-center gap-2 px-3 py-2 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition-all">
+<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                    管理者
+                </button>
+<button class="flex items-center gap-2 px-3 py-2 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition-all">
+<span class="material-symbols-outlined text-[18px]">factory</span>
+                    現場
+                </button>
+<button class="flex items-center gap-2 px-3 py-2 rounded bg-primary text-white shadow-sm text-sm font-medium transition-all">
+<span class="material-symbols-outlined text-[18px]">engineering</span>
+                    技術者
+                </button>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 no-scrollbar">
+<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">ライン選択</h3>
+<div class="flex flex-col gap-2">
+<button class="group flex items-center justify-between p-3 rounded-lg border border-primary bg-primary-light/10 text-primary dark:text-primary-light hover:bg-primary-light/20 transition-all relative overflow-hidden">
+<div class="flex items-center gap-3 relative z-10">
+<span class="w-2.5 h-2.5 rounded-full bg-warning animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>
+<div class="flex flex-col items-start">
+<span class="font-bold text-sm">第1生産ライン</span>
+<span class="text-xs opacity-80">チョコ停多発</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] relative z-10">chevron_right</span>
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+</button>
+<button class="group flex items-center justify-between p-3 rounded-lg border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-all">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-success"></span>
+<div class="flex flex-col items-start">
+<span class="font-bold text-sm">第2生産ライン</span>
+<span class="text-xs opacity-70">設備正常</span>
+</div>
+</div>
+</button>
+<button class="group flex items-center justify-between p-3 rounded-lg border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-all">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+<div class="flex flex-col items-start">
+<span class="font-bold text-sm">第3生産ライン</span>
+<span class="text-xs opacity-70">メンテ中</span>
+</div>
+</div>
+</button>
+</div>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+            ログアウト
+        </button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<header class="h-16 bg-surface/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 z-10">
+<div>
+<h1 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+                製造ラインVSMダッシュボード
+            </h1>
+<p class="text-xs text-slate-500">最終更新: 2023年10月27日 14:38 | センサーデータ受信中 (10ms間隔)</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 text-primary text-xs font-medium flex items-center gap-1">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                技術者モード有効
+            </div>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings_suggest</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-auto p-8 bg-slate-50/50 dark:bg-slate-900/50 relative">
+<div class="absolute inset-0 z-0 opacity-[0.03]" style="background-image: radial-gradient(#64748b 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="relative z-10 max-w-6xl mx-auto h-full flex flex-col">
+<div class="grid grid-cols-4 gap-4 mb-8">
+<div class="bg-surface dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<p class="text-xs text-slate-500 mb-1">設備総合効率 (OEE)</p>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">82.4</span>
+<span class="text-sm text-slate-500 mb-1">%</span>
+<span class="text-xs text-warning font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                            -2.1%
+                        </span>
+</div>
+</div>
+<div class="bg-surface dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<p class="text-xs text-slate-500 mb-1">チョコ停回数 (直近1h)</p>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">5</span>
+<span class="text-sm text-slate-500 mb-1">回</span>
+<span class="text-xs text-danger font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            要確認
+                        </span>
+</div>
+</div>
+<div class="bg-surface dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<p class="text-xs text-slate-500 mb-1">MTBF (平均故障間隔)</p>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">48</span>
+<span class="text-sm text-slate-500 mb-1">h</span>
+<span class="text-xs text-success font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            目標内
+                        </span>
+</div>
+</div>
+<div class="bg-surface dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<p class="text-xs text-slate-500 mb-1">電力消費トレンド</p>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">14.2</span>
+<span class="text-sm text-slate-500 mb-1">kW</span>
+<span class="text-xs text-slate-400 font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-[14px]">trending_flat</span>
+                            安定
+                        </span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4 mt-8">
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-48">
+<div class="bg-surface dark:bg-slate-800 w-full p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary transition-colors shadow-soft relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold text-slate-500 uppercase tracking-wide">Input</div>
+<div class="flex items-center gap-2 mb-2">
+<div class="bg-slate-100 dark:bg-slate-700 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-slate-500">conveyor_belt</span>
+</div>
+<span class="font-bold text-slate-700 dark:text-slate-200">原材料フィーダー</span>
+</div>
+<div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-700 pt-3">
+<div>
+<p class="text-[10px] text-slate-400">供給速度</p>
+<p class="text-lg font-bold text-slate-800 dark:text-white">0.5 m/s</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> 正常
+                                </span>
+</div>
+</div>
+</div>
+<div class="w-full bg-slate-50 dark:bg-slate-800/50 rounded-lg p-2 border border-slate-200 dark:border-slate-700 text-center opacity-70">
+<span class="text-[10px] text-slate-400">モーター負荷: 45% (正常)</span>
+</div>
+</div>
+<div class="flex-1 h-1 bg-slate-200 dark:bg-slate-700 relative mx-2">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-900 px-2 text-[10px] text-slate-400">搬送</div>
+<span class="material-symbols-outlined absolute -right-2 -top-2.5 text-slate-200 dark:text-slate-700">arrow_right</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-56 relative">
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-danger"></span>
+</span>
+<div class="bg-surface dark:bg-slate-800 w-full p-4 rounded-xl border-2 border-danger hover:border-danger transition-colors shadow-soft relative z-10">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-100 dark:bg-red-900 px-2 py-0.5 rounded text-[10px] font-bold text-danger uppercase tracking-wide border border-danger/20">Process 1</div>
+<div class="flex items-center gap-2 mb-2">
+<div class="bg-red-50 dark:bg-red-900/20 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-danger">precision_manufacturing</span>
+</div>
+<span class="font-bold text-slate-700 dark:text-slate-200">プレス加工機</span>
+</div>
+<div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-700 pt-3">
+<div>
+<p class="text-[10px] text-slate-400">チョコ停回数</p>
+<p class="text-xl font-bold text-danger">5 <span class="text-xs font-normal text-slate-500">回/hr</span></p>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-slate-400">設備稼働率</p>
+<p class="text-sm font-semibold text-warning">78.5%</p>
+</div>
+</div>
+</div>
+<div class="w-full bg-white dark:bg-slate-800 rounded-lg p-2 border border-danger shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-slate-500">金型・治具寿命</span>
+<span class="text-xs font-bold text-danger">85% 摩耗</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-danger h-full rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex justify-between items-center mt-0.5">
+<span class="text-[10px] text-slate-500">故障確率</span>
+<span class="text-[10px] font-bold text-white bg-danger px-1.5 rounded">High (92%)</span>
+</div>
+</div>
+<div class="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+<div class="flex items-center gap-2 mb-3 border-b border-slate-100 dark:border-slate-700 pb-2">
+<span class="material-symbols-outlined text-primary text-sm">troubleshoot</span>
+<span class="text-sm font-bold text-slate-800 dark:text-white">センサー解析レポート</span>
+</div>
+<div class="space-y-3">
+<div class="bg-red-50 dark:bg-red-900/20 p-2 rounded text-xs text-red-800 dark:text-red-200 border border-red-100 dark:border-red-900/30">
+<p class="font-bold mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sensors_off</span> センサー異常検知</p>
+<p class="opacity-80">位置決めセンサー(S-204)の応答遅延が確認されました。ノイズまたは汚れの可能性。</p>
+</div>
+<div>
+<p class="text-[10px] text-slate-500 mb-1">振動分析 (Vibration)</p>
+<div class="flex items-center gap-2">
+<div class="h-8 flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded flex items-end px-1 gap-0.5 overflow-hidden">
+<div class="w-1 bg-blue-300 h-[30%]"></div>
+<div class="w-1 bg-blue-300 h-[40%]"></div>
+<div class="w-1 bg-blue-300 h-[35%]"></div>
+<div class="w-1 bg-red-400 h-[80%] animate-pulse"></div>
+<div class="w-1 bg-blue-300 h-[45%]"></div>
+<div class="w-1 bg-blue-300 h-[30%]"></div>
+</div>
+<span class="text-xs font-bold text-danger">異常波形</span>
+</div>
+</div>
+</div>
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-slate-800 border-t border-l border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+</div>
+</div>
+<div class="flex-1 h-1 bg-slate-200 dark:bg-slate-700 relative mx-2">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-900 px-2 text-[10px] text-slate-400">搬送</div>
+<span class="material-symbols-outlined absolute -right-2 -top-2.5 text-slate-200 dark:text-slate-700">arrow_right</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-48">
+<div class="bg-surface dark:bg-slate-800 w-full p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary transition-colors shadow-soft relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold text-slate-500 uppercase tracking-wide">Process 2</div>
+<div class="flex items-center gap-2 mb-2">
+<div class="bg-purple-50 dark:bg-purple-900/20 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-purple-600">settings_input_component</span>
+</div>
+<span class="font-bold text-slate-700 dark:text-slate-200">自動組立機</span>
+</div>
+<div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-700 pt-3">
+<div>
+<p class="text-[10px] text-slate-400">OEE</p>
+<p class="text-xl font-bold text-slate-800 dark:text-white">94.2%</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-slate-400">タクト</p>
+<p class="text-sm font-semibold text-slate-700 dark:text-slate-300">89.5s</p>
+</div>
+</div>
+</div>
+<div class="w-full bg-white dark:bg-slate-800 rounded-lg p-2 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-slate-500">消耗品寿命</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">20% 摩耗</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-success h-full rounded-full" style="width: 20%"></div>
+</div>
+<div class="flex justify-between items-center mt-0.5">
+<span class="text-[10px] text-slate-500">メンテナンス</span>
+<span class="text-[10px] font-bold text-success">不要 (Low)</span>
+</div>
+</div>
+</div>
+<div class="flex-1 h-1 bg-slate-200 dark:bg-slate-700 relative mx-2">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-900 px-2 text-[10px] text-slate-400">搬送</div>
+<span class="material-symbols-outlined absolute -right-2 -top-2.5 text-slate-200 dark:text-slate-700">arrow_right</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-48">
+<div class="bg-surface dark:bg-slate-800 w-full p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary transition-colors shadow-soft relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold text-slate-500 uppercase tracking-wide">Output</div>
+<div class="flex items-center gap-2 mb-2">
+<div class="bg-green-50 dark:bg-green-900/20 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-success">output</span>
+</div>
+<span class="font-bold text-slate-700 dark:text-slate-200">検査・排出</span>
+</div>
+<div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-700 pt-3">
+<div>
+<p class="text-[10px] text-slate-400">良品率</p>
+<p class="text-xl font-bold text-success">99.8%</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                    カメラ正常
+                                </span>
+</div>
+</div>
+</div>
+<div class="w-full bg-slate-50 dark:bg-slate-800/50 rounded-lg p-2 border border-slate-200 dark:border-slate-700 text-center opacity-70">
+<span class="text-[10px] text-slate-400">排出コンベア速度: 正常</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-16 bg-surface dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center px-8 z-10">
+<div class="flex items-center gap-4 w-full max-w-5xl mx-auto">
+<div class="flex flex-col w-48">
+<span class="text-xs font-bold text-slate-700 dark:text-white">技術的稼働時間 (Technical Uptime)</span>
+<span class="text-[10px] text-slate-500">Scheduled vs Actual</span>
+</div>
+<div class="flex-1 relative h-6 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="absolute top-0 bottom-0 w-0.5 bg-slate-400 z-10" style="left: 95%;"></div>
+<div class="absolute top-1 right-[5%] text-[9px] text-slate-400 -translate-y-full pb-1">目標: 95%</div>
+<div class="absolute top-0 bottom-0 left-0 bg-primary h-full rounded-full flex items-center justify-end px-2 text-xs font-bold text-white transition-all duration-1000 ease-out" style="width: 82%;">
+                    7.4h / 9.0h
+                </div>
+<div class="absolute top-0 bottom-0 h-full bg-danger/20" style="left: 82%; width: 10%;"></div>
+</div>
+<div class="w-32 text-right">
+<span class="text-lg font-bold text-primary">82.2%</span>
+<span class="text-xs text-slate-400 ml-1">可動率</span>
+</div>
+</div>
+</div>
+</main>
+<aside class="w-80 bg-surface dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-soft h-full flex-shrink-0">
+<div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-900">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger animate-pulse">warning_amber</span>
+<h2 class="text-sm font-bold text-slate-900 dark:text-white">技術アラート (My Alerts)</h2>
+</div>
+<span class="text-[10px] bg-danger/10 text-danger border border-danger/20 px-2 py-0.5 rounded font-bold">3件</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
+<div class="p-4 rounded-xl border border-danger bg-red-50/30 dark:bg-red-900/10 shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-danger"></div>
+<div class="flex items-start justify-between mb-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-danger text-white">
+<span class="material-symbols-outlined text-[12px]">error</span>
+                    Process 1
+                </span>
+<span class="text-xs text-slate-400">Now</span>
+</div>
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">チョコ停頻発 - センサー異常</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 mb-3">S-204 近接センサーのON/OFF反応が不安定です。断線の疑いあり。</p>
+<div class="flex items-center gap-2">
+<button class="flex-1 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50">
+                    ログ確認
+                </button>
+<button class="flex-1 py-1.5 bg-danger text-white rounded text-xs font-medium hover:bg-red-600 shadow-sm">
+                    保全手配
+                </button>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-warning/50 bg-orange-50/30 dark:bg-orange-900/10 shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-warning"></div>
+<div class="flex items-start justify-between mb-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-warning text-white">
+<span class="material-symbols-outlined text-[12px]">warning</span>
+                    Line 3
+                </span>
+<span class="text-xs text-slate-400">2時間前</span>
+</div>
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">コンベアベルト摩耗検知</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 mb-3">画像診断AIにより、Line 3 メイン搬送ベルトに亀裂予兆を検出しました。</p>
+<div class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+<span class="flex items-center gap-1 text-warning">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                    次回定期メンテで交換推奨
+                </span>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+<div class="flex items-start justify-between mb-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                    システム
+                </span>
+<span class="text-xs text-slate-400">4時間前</span>
+</div>
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">ファームウェア更新完了</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400">PLCコントローラー (Node-04) のアップデートが正常に完了しました。</p>
+</div>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<button class="w-full py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">history</span>
+            メンテナンス履歴へ
+        </button>
+</div>
+</aside>
+
+</body></html>

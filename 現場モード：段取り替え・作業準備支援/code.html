@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VSM Real-Time Monitor - Setup Focus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans+JP:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "setup-yellow": "#fbbf24", 
+                        "setup-yellow-light": "#fef3c7",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-white min-h-screen flex flex-col font-display overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 bg-white dark:bg-[#1a2632] dark:border-slate-700 px-6 py-3 shadow-sm z-10">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">precision_manufacturing</span>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">VSM Real-Time Monitor</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">現場モード：段取り替え・作業準備支援</p>
+</div>
+</div>
+<!-- Center Status Badge -->
+<div class="hidden md:flex items-center gap-2 bg-setup-yellow-light border border-setup-yellow text-amber-800 px-4 py-1.5 rounded-full animate-pulse">
+<span class="material-symbols-outlined text-lg filled-icon">engineering</span>
+<span class="font-bold text-sm uppercase tracking-wide">Change-Over / 段取り中</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-3 text-right">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-slate-400 font-bold">Finished</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">Lot A-200</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-primary font-bold">Next Product</span>
+<span class="text-sm font-bold text-primary">Product Type X</span>
+</div>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center rounded-lg size-10 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors relative">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#1a2632]"></span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-slate-100 dark:border-slate-700" data-alt="User profile picture of the operator" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbRL04L0TSd9CGHyg0XWbh-5bhqZG-stkM1XAoKxuJEeNzt0yIte8lf_BivRhKcEKZaWBsUN_6QXHM8ESw1iKJ3Mi3U0kFNPh3lmlNtP665McKjFOuX4iCpVYpRuHCu3F51sWIf-0or1zY09qUgrkj83x7YyU_YNBxXasBuxVXwRiVap9uRUSKPrr2-rKq7Ocv-nyuErftSvqgXOUTsbux45MDn0fq4mOGHuSNlofCcKh6Tbfs1deT05lgvu1pevHsks4whEJPQbk");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Column: VSM & Controls (Scrollable) -->
+<div class="flex-1 flex flex-col overflow-y-auto p-6 gap-6">
+<!-- Top Hero: Timer & Main Status -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Timer Card -->
+<div class="lg:col-span-7 bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-9xl">timer</span>
+</div>
+<div class="flex justify-between items-start z-10 mb-4">
+<div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wider">Remaining Time / 残り時間</h3>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="text-sm text-slate-400">Target: 15:00</span>
+</div>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded text-xs font-bold">On Track</div>
+</div>
+<div class="flex items-center justify-center py-4 z-10">
+<div class="flex gap-2 text-slate-900 dark:text-white font-black leading-none tracking-tighter tabular-nums">
+<!-- Minutes -->
+<div class="flex flex-col items-center gap-2">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-lg p-4 min-w-[100px] text-center border-b-4 border-slate-200 dark:border-slate-600">
+<span class="text-7xl">08</span>
+</div>
+<span class="text-xs text-slate-400 font-medium uppercase">Minutes</span>
+</div>
+<span class="text-7xl text-slate-300 pb-8">:</span>
+<!-- Seconds -->
+<div class="flex flex-col items-center gap-2">
+<div class="bg-primary/10 text-primary rounded-lg p-4 min-w-[100px] text-center border-b-4 border-primary/30">
+<span class="text-7xl">45</span>
+</div>
+<span class="text-xs text-primary font-medium uppercase">Seconds</span>
+</div>
+</div>
+</div>
+</div>
+<!-- VSM Process Visualization -->
+<div class="lg:col-span-5 bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-0 flex flex-col relative overflow-hidden">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+<h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">hub</span>
+                            Current Stage Visualization
+                        </h3>
+<span class="text-xs font-mono text-slate-400">ID: MC-204</span>
+</div>
+<div class="flex-1 p-6 flex items-center justify-center bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]">
+<div class="relative w-full max-w-[280px]">
+<!-- VSM Process Box Style -->
+<div class="bg-white dark:bg-slate-800 border-2 border-setup-yellow rounded shadow-lg p-1 relative z-10">
+<div class="bg-setup-yellow text-amber-900 text-center text-xs font-bold py-1 uppercase tracking-wider mb-2 rounded-sm">
+                                    Changeover
+                                </div>
+<div class="px-4 py-3 text-center">
+<div class="text-2xl font-black text-slate-800 dark:text-white mb-1">Molding</div>
+<div class="text-sm text-slate-500">成形工程 (Press A)</div>
+</div>
+<div class="grid grid-cols-2 border-t border-slate-200 dark:border-slate-700 mt-2 text-center text-xs">
+<div class="p-2 border-r border-slate-200 dark:border-slate-700">
+<div class="text-slate-400">Cycle</div>
+<div class="font-bold">--</div>
+</div>
+<div class="p-2">
+<div class="text-slate-400">Availability</div>
+<div class="font-bold text-amber-500">Paused</div>
+</div>
+</div>
+</div>
+<!-- VSM Arrow -->
+<div class="absolute top-1/2 -right-16 transform -translate-y-1/2 text-slate-300">
+<span class="material-symbols-outlined text-4xl">arrow_forward</span>
+</div>
+<div class="absolute top-1/2 -left-16 transform -translate-y-1/2 text-slate-300">
+<span class="material-symbols-outlined text-4xl">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Preparation Checklist -->
+<div class="bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+<div class="p-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center flex-wrap gap-4">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">checklist</span>
+                            Preparation Checklist (準備チェックリスト)
+                        </h3>
+<p class="text-sm text-slate-500 mt-1">Required for: Product Type X (Next Run)</p>
+</div>
+<div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-lg">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">Progress</span>
+<div class="w-32 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 42%"></div>
+</div>
+<span class="text-sm font-bold text-primary">42%</span>
+</div>
+</div>
+<div class="p-0">
+<div class="divide-y divide-slate-100 dark:divide-slate-700">
+<label class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group">
+<div class="relative flex items-center">
+<input checked="" class="peer size-6 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer" type="checkbox"/>
+<div class="absolute inset-0 bg-primary rounded scale-0 peer-checked:scale-100 transition-transform flex items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-white text-base">check</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white font-medium group-hover:text-primary transition-colors line-through opacity-60">ジグAの準備 (Prepare Jig A)</p>
+<p class="text-xs text-slate-400">Location: Rack B-01</p>
+</div>
+<div class="text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">COMPLETED</div>
+</label>
+<label class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group border-l-4 border-l-primary bg-primary/5">
+<div class="relative flex items-center">
+<input class="peer size-6 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer" type="checkbox"/>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white font-bold group-hover:text-primary transition-colors">プログラムBのロード (Load Program B)</p>
+<p class="text-xs text-primary font-medium">Critical Step • V.2.4</p>
+</div>
+<div class="text-xs font-bold text-primary bg-white dark:bg-slate-800 border border-primary/20 px-2 py-1 rounded shadow-sm animate-pulse">IN PROGRESS</div>
+</label>
+<label class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group">
+<div class="relative flex items-center">
+<input class="peer size-6 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer" type="checkbox"/>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white font-medium group-hover:text-primary transition-colors">清掃・確認 (Clean &amp; Inspect)</p>
+<p class="text-xs text-slate-400">Standard: SOP-09</p>
+</div>
+</label>
+<label class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group">
+<div class="relative flex items-center">
+<input class="peer size-6 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer" type="checkbox"/>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white font-medium group-hover:text-primary transition-colors">安全装置の確認 (Check Safety Device)</p>
+<p class="text-xs text-red-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">warning</span>
+                                    Safety Priority
+                                </p>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Timeline Section -->
+<div class="bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-bold text-slate-800 dark:text-white text-sm">Schedule Status</h3>
+<div class="flex gap-4 text-xs">
+<div class="flex items-center gap-1"><span class="size-3 bg-slate-300 rounded-sm"></span> Run</div>
+<div class="flex items-center gap-1"><span class="size-3 bg-setup-yellow rounded-sm"></span> Setup (Plan)</div>
+<div class="flex items-center gap-1"><span class="size-3 bg-primary rounded-sm"></span> Actual</div>
+</div>
+</div>
+<div class="relative pt-6 pb-2">
+<!-- Time Markers -->
+<div class="flex justify-between text-xs text-slate-400 absolute top-0 w-full px-[10%]">
+<span>10:00</span>
+<span>10:15</span>
+<span>10:30</span>
+<span>10:45</span>
+</div>
+<div class="flex flex-col gap-4 mt-2">
+<!-- Planned -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-bold text-slate-500 text-right">Plan</span>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden relative">
+<!-- Previous Run -->
+<div class="bg-slate-300 h-full w-[25%] border-r border-white/20"></div>
+<!-- Setup Window -->
+<div class="bg-setup-yellow/30 h-full w-[20%] border-r border-white/20 flex items-center justify-center">
+<span class="text-[10px] font-bold text-amber-700 uppercase">15m</span>
+</div>
+<!-- Next Run -->
+<div class="bg-slate-300 h-full flex-1"></div>
+</div>
+</div>
+<!-- Actual -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-bold text-slate-500 text-right">Actual</span>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden relative">
+<!-- Finished Run -->
+<div class="bg-slate-400 h-full w-[25%] border-r border-white/20"></div>
+<!-- Current Progress -->
+<div class="bg-primary h-full w-[8%] relative group cursor-help">
+<div class="absolute right-0 -top-1 bottom-0 w-0.5 bg-white/50 animate-pulse"></div>
+</div>
+<!-- Remaining Projected -->
+<div class="bg-transparent border border-dashed border-slate-300 h-full w-[12%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar -->
+<aside class="w-80 bg-white dark:bg-[#1a2632] border-l border-slate-200 dark:border-slate-700 p-6 flex flex-col gap-6 overflow-y-auto shrink-0 z-10 shadow-[0_0_15px_rgba(0,0,0,0.03)]">
+<!-- Video Widget -->
+<div class="flex flex-col gap-2">
+<h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500">smart_display</span>
+                    ナレッジ動画 (Procedure)
+                </h4>
+<div class="relative aspect-video rounded-lg overflow-hidden group cursor-pointer shadow-md bg-slate-900">
+<div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-60 transition-opacity" data-alt="Industrial machine setup tutorial video thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDv6oAMungEhonuWz0hTaqpwaDLkPNly9LZjZXuV0FasfdrvYeD6jPBrOR_ZKulgeqrCUCbdfCzkYIFhQQPp31-IbJCDwxuRpBojJAn9LZHsG4960bHyVrl848Rhyudk2HPXriZ5ypDXaxKz73uai84K8Mr9nYUsFEGOMHVa2dzBc61Bwou6FpIlMJBmEEPo4oTxd6HQL5EJO36HYhSp8VhEOQus6ew7Lx944CoZoVJB4qDNksBFvbezfGI9EBh_VLowHBIP4bqz_Y');"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="size-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-white text-2xl filled-icon">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] px-1.5 rounded">03:45</div>
+</div>
+<p class="text-xs text-slate-500">段取り手順：金型交換 (Standard Mold Change)</p>
+</div>
+<hr class="border-slate-100 dark:border-slate-700"/>
+<!-- Docs Widget -->
+<div class="flex flex-col gap-3">
+<h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">description</span>
+                    Reference (資料)
+                </h4>
+<a class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700" href="#">
+<div class="bg-red-50 text-red-600 rounded p-1.5 shrink-0">
+<span class="material-symbols-outlined text-lg">picture_as_pdf</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-800 dark:text-slate-200">Setup Standard Sheet.pdf</p>
+<p class="text-[10px] text-slate-400">Updated: 2 days ago</p>
+</div>
+</a>
+<a class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700" href="#">
+<div class="bg-blue-50 text-blue-600 rounded p-1.5 shrink-0">
+<span class="material-symbols-outlined text-lg">article</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-800 dark:text-slate-200">Tooling List (Type X)</p>
+<p class="text-[10px] text-slate-400">View in System</p>
+</div>
+</a>
+</div>
+<hr class="border-slate-100 dark:border-slate-700"/>
+<!-- Safety Note -->
+<div class="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg p-3">
+<div class="flex items-center gap-2 text-red-700 dark:text-red-400 mb-1">
+<span class="material-symbols-outlined text-base">warning</span>
+<span class="text-xs font-bold uppercase">Safety First</span>
+</div>
+<p class="text-xs text-red-600/80 dark:text-red-300 leading-relaxed">
+                    ロック機構を確認してください。<br/>
+                    Verify lock mechanism before restarting.
+                </p>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-slate-800 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-200 dark:text-slate-900 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-200 dark:shadow-none">
+<span class="material-symbols-outlined filled-icon text-red-500">notifications_active</span>
+<span>Call for Help (Andon)</span>
+</button>
+</div>
+</aside>
+</main>
+</body></html>

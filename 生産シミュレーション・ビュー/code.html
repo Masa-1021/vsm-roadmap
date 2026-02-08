@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Production Simulation View</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-dark": "#0b5db0",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2632",
+                        "text-primary-light": "#0d141b",
+                        "text-secondary-light": "#4c739a",
+                        "text-primary-dark": "#ffffff",
+                        "text-secondary-dark": "#94a3b8",
+                        "danger": "#ef4444",
+                        "warning": "#f59e0b",
+                        "success": "#10b981",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        /* Custom scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .simulation-pattern {
+            background-color: #f6f7f8;
+            background-image: linear-gradient(135deg, #e7edf3 25%, transparent 25%, transparent 50%, #e7edf3 50%, #e7edf3 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
+        }
+        .dark .simulation-pattern {
+            background-color: #101922;
+            background-image: linear-gradient(135deg, #1a2632 25%, transparent 25%, transparent 50%, #1a2632 50%, #1a2632 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark min-h-screen flex flex-col font-display overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e7edf3] dark:border-gray-800 bg-surface-light dark:bg-surface-dark px-6 py-3 sticky top-0 z-50 shadow-sm">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">precision_manufacturing</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">SmartVSM <span class="font-normal text-text-secondary-light dark:text-text-secondary-dark text-sm ml-2 hidden sm:inline-block">| 生産シミュレーション</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">ダッシュボード</a>
+<a class="text-primary font-bold text-sm leading-normal border-b-2 border-primary pb-0.5" href="#">シミュレーション</a>
+<a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">設定</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary-light">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input block w-64 rounded-lg border-none bg-background-light dark:bg-gray-800 py-2 pl-10 pr-3 text-sm placeholder:text-text-secondary-light focus:ring-1 focus:ring-primary" placeholder="注文IDまたはライン検索" type="text"/>
+</div>
+<button class="relative p-2 text-text-secondary-light hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 size-2 bg-danger rounded-full border-2 border-surface-light dark:border-surface-dark"></span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center border border-gray-200 dark:border-gray-700" data-alt="User profile portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEaKGXCb3hqI7E5Qxd31xGRi1AKicCHLpN6mGCGqxqABsYagyTZKwSsLEbtI87F1tvtX70QnS9bVvb5iK67O5FXYYLAlmTl0LZMcRO-t7nWYd0QN1S96D02jfE_XY9vw9I-PN1TGmbYse89lFCMLHHeY3Rm0xFLt90AuorIYkWBTZcmN-hI0oXSx0MyKIRKnhSRzZPYV8ACP8mTelCokyw1NisSQKFnBb8tKm5AsToxbBxrpNbZDW7Djyi4vmIQ5nxJ1ajYKp5BB8');"></div>
+</div>
+</header>
+<!-- Main Content Layout -->
+<div class="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
+<!-- Left: Main VSM Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Breadcrumbs & Title -->
+<div class="px-6 py-4 bg-surface-light dark:bg-surface-dark border-b border-[#e7edf3] dark:border-gray-800 z-10 shrink-0">
+<div class="flex items-center gap-2 text-sm text-text-secondary-light mb-2">
+<a class="hover:text-primary" href="#">ホーム</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary" href="#">生産管理</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-text-primary-light dark:text-text-primary-dark font-medium">シミュレーション実行中</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+<div>
+<h1 class="text-2xl font-black tracking-tight flex items-center gap-3">
+                            特急品投入シミュレーション
+                            <span class="px-2 py-0.5 rounded text-xs font-bold bg-primary/10 text-primary border border-primary/20 animate-pulse">SIMULATION MODE</span>
+</h1>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mt-1">優先注文を現在のラインに挿入した場合の影響度分析</p>
+</div>
+<!-- Simulation Controls -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-gray-800 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
+<div class="flex items-center gap-3 px-2">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-text-secondary-light tracking-wider">Rush Order</span>
+<span class="text-sm font-bold">500個 / Priority A</span>
+</div>
+<span class="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-1"></span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-text-secondary-light tracking-wider">Start Time</span>
+<span class="text-sm font-bold">13:00 (Predicted)</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ms-3 text-sm font-medium text-primary dark:text-primary-dark">ON</span>
+</label>
+</div>
+</div>
+</div>
+<!-- VSM Canvas Area -->
+<div class="flex-1 overflow-auto p-8 relative simulation-pattern">
+<!-- Background Label -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 select-none">
+<span class="text-[120px] font-black text-gray-500 transform -rotate-12">SIMULATION</span>
+</div>
+<!-- Process Flow Container -->
+<div class="flex flex-nowrap items-center justify-start min-w-max gap-8 px-8 py-12">
+<!-- Input Material -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full bg-surface-light dark:bg-surface-dark border-2 border-dashed border-gray-300 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-3xl">inventory_2</span>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase">Raw Material</span>
+</div>
+<!-- Arrow -->
+<div class="w-12 h-0.5 bg-gray-300 dark:bg-gray-600 relative">
+<span class="absolute right-0 top-1/2 -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[8px] border-l-gray-300 dark:border-l-gray-600"></span>
+</div>
+<!-- Process 1: Cutting -->
+<div class="relative group">
+<!-- WIP Indicator Top -->
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-light dark:bg-surface-dark shadow-md border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-xs font-bold mb-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-success"></span>
+                                WIP: 45
+                            </div>
+<div class="h-8 w-0.5 border-l-2 border-dashed border-gray-300"></div>
+</div>
+<!-- Card -->
+<div class="w-64 bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg border-l-4 border-success p-4 relative z-10 transition-transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="font-bold text-lg">工程 1: 切断</h3>
+<p class="text-xs text-text-secondary-light">Cutting Machine A</p>
+</div>
+<span class="material-symbols-outlined text-gray-300">content_cut</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-3">
+<div class="bg-background-light dark:bg-gray-800 p-2 rounded">
+<p class="text-[10px] text-text-secondary-light uppercase">Cycle Time</p>
+<p class="font-mono font-bold text-sm">45s <span class="text-text-secondary-light text-[10px] line-through ml-1">42s</span></p>
+</div>
+<div class="bg-primary/10 p-2 rounded border border-primary/20">
+<p class="text-[10px] text-primary uppercase font-bold">Load %</p>
+<p class="font-mono font-bold text-primary text-sm">95%</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+<div class="bg-success h-1.5 rounded-full" style="width: 95%"></div>
+</div>
+</div>
+</div>
+<!-- Connector with Queue Build-up Warning -->
+<div class="w-24 flex flex-col items-center justify-center gap-1 relative">
+<div class="flex items-center w-full">
+<div class="h-0.5 flex-1 bg-gray-300 dark:bg-gray-600"></div>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600 text-sm -ml-2">arrow_forward</span>
+</div>
+<!-- Simulated Queue Buildup -->
+<div class="absolute -bottom-10 bg-warning/10 text-warning border border-warning/30 px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            Queue: +120 items
+                        </div>
+</div>
+<!-- Process 2: Assembly (BOTTLENECK) -->
+<div class="relative group">
+<!-- Alert Indicator -->
+<div class="absolute -top-4 -right-4 z-20 size-8 bg-danger text-white rounded-full flex items-center justify-center shadow-lg animate-bounce">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+</div>
+<!-- Card -->
+<div class="w-64 bg-surface-light dark:bg-surface-dark rounded-xl shadow-xl ring-2 ring-danger/50 p-4 relative z-10 transition-transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="font-bold text-lg text-danger">工程 2: 組立</h3>
+<p class="text-xs text-text-secondary-light">Assembly Line B</p>
+</div>
+<span class="material-symbols-outlined text-danger">engineering</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-3">
+<div class="bg-background-light dark:bg-gray-800 p-2 rounded">
+<p class="text-[10px] text-text-secondary-light uppercase">Cycle Time</p>
+<p class="font-mono font-bold text-sm text-danger">120s <span class="text-text-secondary-light text-[10px] line-through ml-1">90s</span></p>
+</div>
+<div class="bg-danger/10 p-2 rounded border border-danger/20">
+<p class="text-[10px] text-danger uppercase font-bold">Load %</p>
+<p class="font-mono font-bold text-danger text-sm">125%</p>
+</div>
+</div>
+<!-- Progress Bar (Overflow) -->
+<div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700 overflow-hidden relative">
+<div class="bg-danger h-1.5 rounded-full absolute left-0 top-0" style="width: 100%"></div>
+<div class="bg-danger/50 h-1.5 rounded-full absolute left-0 top-0 animate-pulse" style="width: 100%"></div>
+</div>
+<p class="text-[10px] text-danger font-bold mt-1 text-right">OVERLOAD PREDICTED</p>
+</div>
+</div>
+<!-- Connector -->
+<div class="w-24 flex items-center justify-center">
+<div class="h-0.5 w-full bg-gray-300 dark:bg-gray-600 relative">
+<span class="absolute right-0 top-1/2 -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[8px] border-l-gray-300 dark:border-l-gray-600"></span>
+</div>
+</div>
+<!-- Process 3: Packing -->
+<div class="relative group">
+<!-- Starved Indicator -->
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-50">
+<div class="bg-surface-light dark:bg-surface-dark shadow-md border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-xs font-bold mb-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-gray-400"></span>
+                                WIP: 5
+                            </div>
+<div class="h-8 w-0.5 border-l-2 border-dashed border-gray-300"></div>
+</div>
+<!-- Card -->
+<div class="w-64 bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg border-l-4 border-gray-300 p-4 relative z-10 transition-transform hover:-translate-y-1 opacity-90">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="font-bold text-lg">工程 3: 梱包</h3>
+<p class="text-xs text-text-secondary-light">Packing Station</p>
+</div>
+<span class="material-symbols-outlined text-gray-300">inventory</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-3">
+<div class="bg-background-light dark:bg-gray-800 p-2 rounded">
+<p class="text-[10px] text-text-secondary-light uppercase">Cycle Time</p>
+<p class="font-mono font-bold text-sm">30s</p>
+</div>
+<div class="bg-gray-100 dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-700">
+<p class="text-[10px] text-text-secondary-light uppercase font-bold">Load %</p>
+<p class="font-mono font-bold text-text-secondary-light text-sm">40%</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+<div class="bg-blue-300 h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+<p class="text-[10px] text-text-secondary-light font-bold mt-1 text-right uppercase">Starved</p>
+</div>
+</div>
+<!-- Final Output -->
+<div class="w-12 h-0.5 bg-gray-300 dark:bg-gray-600 relative mx-4">
+<span class="absolute right-0 top-1/2 -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[8px] border-l-gray-300 dark:border-l-gray-600"></span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full bg-green-50 border-2 border-green-500 flex items-center justify-center shadow-sm text-green-600">
+<span class="material-symbols-outlined text-3xl">local_shipping</span>
+</div>
+<span class="text-xs font-bold text-green-600 uppercase">Shipping</span>
+</div>
+</div>
+</div>
+<!-- Bottom Data Table / Legend -->
+<div class="bg-surface-light dark:bg-surface-dark border-t border-[#e7edf3] dark:border-gray-800 p-4 shrink-0">
+<div class="flex items-center gap-6 text-sm">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-success"></span>
+<span class="text-text-secondary-light">Normal Load (&lt;85%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-warning"></span>
+<span class="text-text-secondary-light">High Load (85-95%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-danger"></span>
+<span class="text-text-secondary-light">Overload (&gt;95%)</span>
+</div>
+<div class="flex items-center gap-2 ml-auto text-xs text-text-secondary-light">
+<span class="material-symbols-outlined text-base">info</span>
+<span>シミュレーション結果は過去の生産データに基づきます</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Right: AI Sidebar -->
+<aside class="w-full md:w-[360px] bg-surface-light dark:bg-surface-dark border-l border-[#e7edf3] dark:border-gray-800 flex flex-col shrink-0 overflow-y-auto">
+<div class="p-6">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">auto_fix_high</span>
+<h2 class="font-bold text-lg text-text-primary-light dark:text-text-primary-dark">AI 予測サマリー</h2>
+</div>
+<!-- Alert Card -->
+<div class="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl p-4 mb-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger mt-0.5">warning</span>
+<div>
+<h3 class="font-bold text-danger text-sm mb-1">第2工程で渋滞が予測されます</h3>
+<p class="text-xs text-text-primary-light dark:text-gray-300 leading-relaxed opacity-90">
+                                特急品（500個）投入により、14:30頃から第2工程（組立）の負荷が125%に達する見込みです。
+                            </p>
+</div>
+</div>
+</div>
+<!-- Metrics -->
+<div class="mb-6 space-y-4">
+<h3 class="text-xs font-bold uppercase text-text-secondary-light tracking-wider mb-2">Impact Analysis</h3>
+<div class="bg-background-light dark:bg-gray-800 rounded-lg p-3">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-text-secondary-light">総リードタイム</span>
+<span class="text-sm font-bold text-danger">+45 min <span class="material-symbols-outlined align-bottom text-[16px]">trending_up</span></span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full mt-2">
+<div class="bg-danger h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+<p class="text-[10px] text-right mt-1 text-text-secondary-light">通常: 4h 15m → 予測: 5h 00m</p>
+</div>
+<div class="bg-background-light dark:bg-gray-800 rounded-lg p-3">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-text-secondary-light">スループット (JPH)</span>
+<span class="text-sm font-bold text-warning">-12% <span class="material-symbols-outlined align-bottom text-[16px]">trending_down</span></span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full mt-2">
+<div class="bg-warning h-1.5 rounded-full" style="width: 70%"></div>
+</div>
+</div>
+</div>
+<!-- Recommendations -->
+<div class="border-t border-gray-100 dark:border-gray-800 pt-6">
+<h3 class="text-xs font-bold uppercase text-text-secondary-light tracking-wider mb-4">推奨アクション</h3>
+<div class="space-y-3">
+<button class="w-full text-left p-3 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex items-start gap-3 group">
+<div class="bg-primary/20 text-primary rounded p-1 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">person_add</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-primary mb-0.5">人員の追加配置</h4>
+<p class="text-xs text-text-secondary-light dark:text-gray-400">第2工程に作業者を1名追加</p>
+</div>
+</button>
+<button class="w-full text-left p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-start gap-3">
+<div class="bg-gray-100 dark:bg-gray-700 text-gray-500 rounded p-1">
+<span class="material-symbols-outlined text-sm">schedule</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-text-primary-light dark:text-gray-200 mb-0.5">残業設定</h4>
+<p class="text-xs text-text-secondary-light dark:text-gray-400">組立ラインの稼働を1時間延長</p>
+</div>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg shadow-lg shadow-primary/30 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">save_alt</span>
+                    分析レポートを保存
+                </button>
+</div>
+</aside>
+</div>
+</body></html>

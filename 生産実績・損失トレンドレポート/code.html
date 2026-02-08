@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>生産実績・損失トレンドレポート - VSM Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "primary-hover": "#0f6bd0",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#334155",
+                        "text-primary-light": "#0f172a",
+                        "text-secondary-light": "#64748b",
+                        "text-primary-dark": "#f1f5f9",
+                        "text-secondary-dark": "#94a3b8",
+                        "accent-success": "#10b981",
+                        "accent-warning": "#f59e0b",
+                        "accent-danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
+                        display: ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark transition-colors duration-200 flex flex-col min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-30 flex items-center justify-between border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-6 py-3 shadow-sm">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg class="h-full w-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-primary-light dark:text-text-primary-dark text-lg font-bold tracking-tight">VSM Dashboard</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors text-sm font-medium" href="#">ダッシュボード</a>
+<a class="text-text-primary-light dark:text-text-primary-dark hover:text-primary transition-colors text-sm font-medium" href="#">トレンド</a>
+<a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors text-sm font-medium" href="#">レポート</a>
+<a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors text-sm font-medium" href="#">設定</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex relative items-center">
+<span class="absolute left-3 text-text-secondary-light dark:text-text-secondary-dark material-symbols-outlined text-[20px]">search</span>
+<input class="w-64 rounded-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark py-2 pl-10 pr-4 text-sm text-text-primary-light dark:text-text-primary-dark placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="検索..." type="text"/>
+</div>
+<div class="h-9 w-9 overflow-hidden rounded-full border border-border-light dark:border-border-dark bg-cover bg-center" data-alt="Portrait of a professional user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBx1zb9LtOK-JAETG-dtY1UitPRWkdqmlvY99cAr1DYKU0CeXn80XIUvZflJKk0G_KEb6YVT3zYQBYCAXG512XOLsc7XWikfcguCOcEe-paXtZjev0yN9-o8MPJmpiyEElJFcPLdrGbtCR6g2BXikxFjZMNXsILR-Q-xwAwYLOhnVX2Wdo0luFEcjxM0dwJUkCFunWEkYGRuCL2QEdVMTo3-XjdrAaKDv5Xqq6dPTANoAurOrOvDnifI_OPw4UZI7SJyWKcTxzhg1c');"></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation & Filter -->
+<aside class="w-72 flex-col overflow-y-auto border-r border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hidden lg:flex">
+<div class="p-6">
+<div class="mb-8">
+<h3 class="mb-4 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">表示設定</h3>
+<!-- Time Range Selector -->
+<div class="flex w-full rounded-lg bg-background-light dark:bg-background-dark p-1 mb-6 border border-border-light dark:border-border-dark">
+<button class="flex-1 rounded-md py-1.5 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-all">日次</button>
+<button class="flex-1 rounded-md bg-white dark:bg-surface-dark py-1.5 text-xs font-medium text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10">週次</button>
+<button class="flex-1 rounded-md py-1.5 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-all">月次</button>
+</div>
+<!-- Date Picker -->
+<div class="mb-6">
+<label class="mb-2 block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">期間指定</label>
+<div class="space-y-2">
+<div class="relative">
+<input class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" type="date" value="2023-10-01"/>
+</div>
+<div class="relative">
+<input class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" type="date" value="2023-12-31"/>
+</div>
+</div>
+</div>
+<!-- Line Filter -->
+<div class="mb-8">
+<label class="mb-2 block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">ライン選択</label>
+<select class="w-full appearance-none rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+<option>全ての生産ライン</option>
+<option>第1製造ライン (Line A)</option>
+<option>第2製造ライン (Line B)</option>
+<option>組立ライン C</option>
+</select>
+</div>
+<button class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-hover transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_alt</span>
+                        フィルタ適用
+                    </button>
+</div>
+<div>
+<h3 class="mb-4 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">メニュー</h3>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                            概要
+                        </a>
+<a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary dark:text-primary" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+                            生産実績・損失トレンド
+                        </a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="#">
+<span class="material-symbols-outlined">warning</span>
+                            異常検知レポート
+                        </a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                            システム設定
+                        </a>
+</nav>
+</div>
+</div>
+<div class="mt-auto border-t border-border-light dark:border-border-dark p-6">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-primary font-bold">YM</div>
+<div>
+<p class="text-sm font-medium text-text-primary-light dark:text-text-primary-dark">山田 太郎</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">製造管理者</p>
+</div>
+<button class="ml-auto text-text-secondary-light dark:text-text-secondary-dark hover:text-primary">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-4 md:p-8">
+<div class="mx-auto max-w-7xl">
+<!-- Breadcrumbs & Header -->
+<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+<div>
+<nav class="mb-2 flex items-center text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<a class="hover:text-primary" href="#">ホーム</a>
+<span class="mx-2">/</span>
+<span class="text-text-primary-light dark:text-text-primary-dark font-medium">生産実績・損失トレンドレポート</span>
+</nav>
+<h1 class="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark md:text-3xl">生産実績・損失トレンドレポート</h1>
+<p class="mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark">過去の生産パフォーマンスと損失傾向の分析（対象：2023年10月 - 12月）</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center gap-2 rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 py-2 text-sm font-medium text-text-primary-light dark:text-text-primary-dark shadow-sm hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+<span class="material-symbols-outlined text-[20px]">print</span>
+                            印刷
+                        </button>
+<button class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-hover transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                            エクスポート
+                        </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+<!-- KPI 1 -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-5 shadow-sm">
+<div class="mb-2 flex items-center justify-between">
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">平均直行率 (FPY)</p>
+<span class="flex items-center text-xs font-medium text-accent-success bg-accent-success/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span>
+                                +1.5%
+                            </span>
+</div>
+<p class="text-3xl font-bold text-text-primary-light dark:text-text-primary-dark">94.2%</p>
+<div class="mt-4 h-1.5 w-full rounded-full bg-background-light dark:bg-background-dark">
+<div class="h-1.5 rounded-full bg-primary" style="width: 94%"></div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-5 shadow-sm">
+<div class="mb-2 flex items-center justify-between">
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">総生産数</p>
+<span class="flex items-center text-xs font-medium text-accent-success bg-accent-success/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span>
+                                +5.2%
+                            </span>
+</div>
+<p class="text-3xl font-bold text-text-primary-light dark:text-text-primary-dark">128,450</p>
+<p class="mt-1 text-xs text-text-secondary-light dark:text-text-secondary-dark">目標: 125,000</p>
+</div>
+<!-- KPI 3 -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-5 shadow-sm">
+<div class="mb-2 flex items-center justify-between">
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">総損失コスト</p>
+<span class="flex items-center text-xs font-medium text-accent-danger bg-accent-danger/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_down</span>
+                                +2.4%
+                            </span>
+</div>
+<p class="text-3xl font-bold text-text-primary-light dark:text-text-primary-dark">$52,000</p>
+<p class="mt-1 text-xs text-text-secondary-light dark:text-text-secondary-dark">前月比: +$1,200</p>
+</div>
+<!-- KPI 4 -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-5 shadow-sm">
+<div class="mb-2 flex items-center justify-between">
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">平均サイクルタイム</p>
+<span class="flex items-center text-xs font-medium text-accent-success bg-accent-success/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_down</span>
+                                -0.5s
+                            </span>
+</div>
+<p class="text-3xl font-bold text-text-primary-light dark:text-text-primary-dark">42s</p>
+<p class="mt-1 text-xs text-text-secondary-light dark:text-text-secondary-dark">標準: 45s</p>
+</div>
+</div>
+<!-- Chart Section 1: Main Trends -->
+<div class="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+<!-- FPY Trend Chart -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-6 shadow-sm lg:col-span-2">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">直行率トレンド推移 (FPY Trend)</h3>
+<button class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Placeholder for Chart -->
+<div class="relative h-72 w-full">
+<!-- Custom Chart Visualization using CSS/HTML -->
+<div class="absolute bottom-0 left-8 right-0 top-4 flex items-end justify-between gap-2 px-2 pb-6 border-l border-b border-border-light dark:border-border-dark">
+<!-- Grid Lines -->
+<div class="absolute left-0 right-0 top-[0%] h-px w-full border-t border-dashed border-border-light dark:border-border-dark"></div>
+<div class="absolute left-0 right-0 top-[25%] h-px w-full border-t border-dashed border-border-light dark:border-border-dark"></div>
+<div class="absolute left-0 right-0 top-[50%] h-px w-full border-t border-dashed border-border-light dark:border-border-dark"></div>
+<div class="absolute left-0 right-0 top-[75%] h-px w-full border-t border-dashed border-border-light dark:border-border-dark"></div>
+<!-- Data Points & Line (Simulated) -->
+<!-- We are simulating a line chart with connected points conceptually or just points for this static demo -->
+<svg class="absolute inset-0 h-full w-full overflow-visible" preserveaspectratio="none">
+<defs>
+<lineargradient id="gradientPrimary" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#137fec" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#137fec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path class="w-full h-full vector-effect-non-scaling-stroke" d="M 0 180 L 40 160 L 90 170 L 140 120 L 190 130 L 240 90 L 290 80 L 340 100 L 390 60 L 440 50 L 490 70 L 540 40 L 590 30 L 640 45 L 690 20 L 740 30" fill="none" stroke="#137fec" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path class="opacity-50" d="M 0 180 L 40 160 L 90 170 L 140 120 L 190 130 L 240 90 L 290 80 L 340 100 L 390 60 L 440 50 L 490 70 L 540 40 L 590 30 L 640 45 L 690 20 L 740 30 V 280 H 0 Z" fill="url(#gradientPrimary)" stroke="none"></path>
+</svg>
+<!-- X-Axis Labels -->
+<div class="absolute -bottom-6 left-0 text-xs text-text-secondary-light">10/01</div>
+<div class="absolute -bottom-6 left-1/4 text-xs text-text-secondary-light">10/15</div>
+<div class="absolute -bottom-6 left-2/4 text-xs text-text-secondary-light">11/01</div>
+<div class="absolute -bottom-6 left-3/4 text-xs text-text-secondary-light">11/15</div>
+<div class="absolute -bottom-6 right-0 text-xs text-text-secondary-light">12/01</div>
+<!-- Y-Axis Labels -->
+<div class="absolute -left-8 bottom-0 text-xs text-text-secondary-light">80%</div>
+<div class="absolute -left-8 top-[75%] text-xs text-text-secondary-light">85%</div>
+<div class="absolute -left-8 top-[50%] text-xs text-text-secondary-light">90%</div>
+<div class="absolute -left-8 top-[25%] text-xs text-text-secondary-light">95%</div>
+<div class="absolute -left-8 top-0 text-xs text-text-secondary-light">100%</div>
+</div>
+</div>
+</div>
+<!-- Monthly Loss Distribution -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-6 shadow-sm">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">ライン別月次損失内訳</h3>
+</div>
+<div class="h-72 w-full flex flex-col justify-center gap-6">
+<!-- Line A -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-text-primary-light dark:text-text-primary-dark">ライン A</span>
+<span class="text-text-secondary-light dark:text-text-secondary-dark">$24k</span>
+</div>
+<div class="flex h-6 w-full overflow-hidden rounded-full bg-background-light dark:bg-background-dark">
+<div class="bg-primary" style="width: 45%" title="故障: 45%"></div>
+<div class="bg-accent-warning" style="width: 30%" title="段取り: 30%"></div>
+<div class="bg-accent-danger" style="width: 25%" title="品質不良: 25%"></div>
+</div>
+</div>
+<!-- Line B -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-text-primary-light dark:text-text-primary-dark">ライン B</span>
+<span class="text-text-secondary-light dark:text-text-secondary-dark">$18k</span>
+</div>
+<div class="flex h-6 w-full overflow-hidden rounded-full bg-background-light dark:bg-background-dark">
+<div class="bg-primary" style="width: 20%" title="故障: 20%"></div>
+<div class="bg-accent-warning" style="width: 50%" title="段取り: 50%"></div>
+<div class="bg-accent-danger" style="width: 30%" title="品質不良: 30%"></div>
+</div>
+</div>
+<!-- Line C -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-text-primary-light dark:text-text-primary-dark">ライン C</span>
+<span class="text-text-secondary-light dark:text-text-secondary-dark">$10k</span>
+</div>
+<div class="flex h-6 w-full overflow-hidden rounded-full bg-background-light dark:bg-background-dark">
+<div class="bg-primary" style="width: 60%" title="故障: 60%"></div>
+<div class="bg-accent-warning" style="width: 20%" title="段取り: 20%"></div>
+<div class="bg-accent-danger" style="width: 20%" title="品質不良: 20%"></div>
+</div>
+</div>
+<!-- Legend -->
+<div class="mt-4 flex flex-wrap gap-4 text-xs text-text-secondary-light dark:text-text-secondary-dark">
+<div class="flex items-center gap-1.5"><div class="size-2.5 rounded-full bg-primary"></div> 設備故障</div>
+<div class="flex items-center gap-1.5"><div class="size-2.5 rounded-full bg-accent-warning"></div> 段取り替え</div>
+<div class="flex items-center gap-1.5"><div class="size-2.5 rounded-full bg-accent-danger"></div> 品質不良</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chart Section 2: WIP vs Output -->
+<div class="mb-8 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-6 shadow-sm">
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<h3 class="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">仕掛品(WIP)と生産高の相関 (WIP vs Output)</h3>
+<div class="flex items-center gap-2">
+<span class="text-xs text-text-secondary-light dark:text-text-secondary-dark">表示:</span>
+<select class="rounded-md border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark py-1 pl-2 pr-6 text-xs text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring-0">
+<option>全工程</option>
+<option>工程Aのみ</option>
+</select>
+</div>
+</div>
+<div class="relative h-80 w-full">
+<div class="absolute inset-0 flex items-end justify-between px-10 pb-8 pt-4">
+<!-- Background Grid -->
+<div class="absolute inset-x-10 bottom-8 top-4 flex flex-col justify-between border-l border-r border-border-light dark:border-border-dark">
+<div class="h-px w-full bg-border-light dark:bg-border-dark opacity-50"></div>
+<div class="h-px w-full bg-border-light dark:bg-border-dark opacity-50"></div>
+<div class="h-px w-full bg-border-light dark:bg-border-dark opacity-50"></div>
+<div class="h-px w-full bg-border-light dark:bg-border-dark opacity-50"></div>
+<div class="h-px w-full bg-border-light dark:bg-border-dark opacity-50"></div>
+</div>
+<!-- Bars (WIP) and Line (Output) Mix simulation -->
+<!-- Bar Group 1 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[40%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 1</div>
+</div>
+<!-- Bar Group 2 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[55%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 2</div>
+</div>
+<!-- Bar Group 3 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[45%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 3</div>
+</div>
+<!-- Bar Group 4 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[60%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 4</div>
+</div>
+<!-- Bar Group 5 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[70%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 5</div>
+</div>
+<!-- Bar Group 6 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[50%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 6</div>
+</div>
+<!-- Bar Group 7 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[30%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 7</div>
+</div>
+<!-- Bar Group 8 -->
+<div class="group relative flex h-full w-full flex-col justify-end items-center px-1">
+<div class="w-4 bg-primary/30 h-[40%] rounded-t-sm group-hover:bg-primary/50 transition-colors" data-alt="WIP Bar"></div>
+<div class="absolute bottom-[-24px] text-xs text-text-secondary-light">Week 8</div>
+</div>
+<!-- Line Chart Overlay (Output) -->
+<svg class="absolute inset-x-10 bottom-8 top-4 h-full w-[calc(100%-5rem)] overflow-visible pointer-events-none">
+<path class="vector-effect-non-scaling-stroke drop-shadow-md" d="M 0 150 L 50 120 L 100 130 L 150 90 L 200 70 L 250 110 L 300 160 L 350 140 L 400 100 L 450 80 L 500 90 L 550 60" fill="none" stroke="#10b981" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Points -->
+<circle cx="0" cy="150" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="100" cy="130" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="200" cy="70" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="300" cy="160" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="400" cy="100" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="500" cy="90" fill="white" r="4" stroke="#10b981" stroke-width="2"></circle>
+</svg>
+<!-- Y-Axis Left (WIP Qty) -->
+<div class="absolute left-0 top-0 flex h-full flex-col justify-between pb-8 pt-4 text-xs text-text-secondary-light">
+<span>500</span>
+<span>400</span>
+<span>300</span>
+<span>200</span>
+<span>100</span>
+<span>0</span>
+</div>
+<!-- Y-Axis Right (Output Qty) -->
+<div class="absolute right-0 top-0 flex h-full flex-col justify-between pb-8 pt-4 text-xs text-text-secondary-light">
+<span>10k</span>
+<span>8k</span>
+<span>6k</span>
+<span>4k</span>
+<span>2k</span>
+<span>0</span>
+</div>
+</div>
+</div>
+<div class="mt-4 flex justify-center gap-6">
+<div class="flex items-center gap-2 text-sm">
+<div class="h-3 w-3 bg-primary/30 rounded-sm border border-primary/50"></div>
+<span class="text-text-primary-light dark:text-text-primary-dark">WIP数量 (Left)</span>
+</div>
+<div class="flex items-center gap-2 text-sm">
+<div class="h-0.5 w-4 bg-accent-success"></div>
+<span class="text-text-primary-light dark:text-text-primary-dark">生産完了数 (Right)</span>
+</div>
+</div>
+</div>
+<!-- Detailed Data Table -->
+<div class="rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm overflow-hidden">
+<div class="border-b border-border-light dark:border-border-dark px-6 py-4 flex justify-between items-center">
+<h3 class="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">製造ライン別詳細データ</h3>
+<button class="text-sm text-primary hover:text-primary-hover font-medium">全て見る</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<thead class="bg-background-light dark:bg-background-dark text-xs uppercase text-text-secondary-light dark:text-text-secondary-dark">
+<tr>
+<th class="px-6 py-3 font-medium" scope="col">ライン名</th>
+<th class="px-6 py-3 font-medium" scope="col">稼働率</th>
+<th class="px-6 py-3 font-medium" scope="col">良品数</th>
+<th class="px-6 py-3 font-medium" scope="col">不良品数</th>
+<th class="px-6 py-3 font-medium" scope="col">損失コスト</th>
+<th class="px-6 py-3 font-medium" scope="col">ステータス</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-light dark:divide-border-dark">
+<tr class="hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+<td class="px-6 py-4 font-medium text-text-primary-light dark:text-text-primary-dark">第1製造ライン (Line A)</td>
+<td class="px-6 py-4">98.5%</td>
+<td class="px-6 py-4">45,200</td>
+<td class="px-6 py-4 text-accent-danger font-medium">320</td>
+<td class="px-6 py-4">$24,500</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-accent-success/10 px-2.5 py-0.5 text-xs font-medium text-accent-success">
+                                            正常稼働
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+<td class="px-6 py-4 font-medium text-text-primary-light dark:text-text-primary-dark">第2製造ライン (Line B)</td>
+<td class="px-6 py-4">92.1%</td>
+<td class="px-6 py-4">38,150</td>
+<td class="px-6 py-4 text-accent-warning font-medium">890</td>
+<td class="px-6 py-4">$18,200</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-accent-warning/10 px-2.5 py-0.5 text-xs font-medium text-accent-warning">
+                                            要注意
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+<td class="px-6 py-4 font-medium text-text-primary-light dark:text-text-primary-dark">組立ライン C</td>
+<td class="px-6 py-4">88.4%</td>
+<td class="px-6 py-4">22,050</td>
+<td class="px-6 py-4 text-accent-danger font-medium">1,205</td>
+<td class="px-6 py-4">$10,100</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-accent-danger/10 px-2.5 py-0.5 text-xs font-medium text-accent-danger">
+                                            メンテナンス要
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>製造ラインVSMダッシュボード（管理者モード）</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-light": "#e0f0ff",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "danger": "#ef4444",
+                        "warning": "#f59e0b",
+                        "success": "#10b981",
+                        "surface": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'xl-soft': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 flex h-screen overflow-hidden">
+<div class="flex flex-1 overflow-hidden filter blur-[2px] pointer-events-none">
+<aside class="w-64 bg-surface dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-soft h-full flex-shrink-0">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-6">
+<div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md">MK</div>
+<div>
+<h2 class="text-sm font-bold text-slate-900">田中 真一</h2>
+<p class="text-xs text-slate-500">工場長 (Manager)</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4">
+<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">ライン選択</h3>
+<div class="flex flex-col gap-2">
+<div class="p-3 rounded-lg border border-primary bg-primary-light/10 text-primary">
+<span class="font-bold text-sm">第1生産ライン</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<header class="h-16 bg-surface border-b border-slate-200 flex items-center justify-between px-6 z-10">
+<h1 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                製造ラインVSMダッシュボード
+            </h1>
+</header>
+<div class="flex-1 p-8 bg-slate-50/50">
+<div class="max-w-6xl mx-auto">
+<div class="grid grid-cols-4 gap-4 mb-8">
+<div class="bg-surface p-4 rounded-xl border border-slate-200"></div>
+<div class="bg-surface p-4 rounded-xl border border-slate-200"></div>
+<div class="bg-surface p-4 rounded-xl border border-slate-200"></div>
+<div class="bg-surface p-4 rounded-xl border border-slate-200"></div>
+</div>
+<div class="h-64 border-2 border-dashed border-slate-200 rounded-2xl"></div>
+</div>
+</div>
+</main>
+<aside class="w-80 bg-surface border-l border-slate-200 h-full flex-shrink-0"></aside>
+</div>
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+<div class="bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-xl-soft overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300">
+<div class="px-8 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+</div>
+<div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                        工程3: 組立詳細分析
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">
+                            Critical
+                        </span>
+</h2>
+<p class="text-xs text-slate-500 mt-0.5 font-medium uppercase tracking-wider">Line 1 - Station: ASSEMBLY_03</p>
+</div>
+</div>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-400">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-8 no-scrollbar bg-white dark:bg-slate-900">
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-7 space-y-6">
+<section class="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30 p-5">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">psychology</span>
+<h3 class="font-bold text-slate-900 dark:text-white">AI原因分析</h3>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-1 bg-primary rounded-full"></div>
+<p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                                    現在の遅延は、<span class="font-bold text-primary">センサー S-204 での頻繁なチョコ停</span>（微小停止）と、<span class="font-bold text-primary">担当オペレーターのスキルギャップ</span>が組み合わさったことが主な原因と推測されます。
+                                </p>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 text-xs">
+<div class="flex justify-between mb-1">
+<span class="text-slate-500">推論精度</span>
+<span class="font-bold text-success">94%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-1 rounded-full">
+<div class="bg-success h-1 rounded-full w-[94%]"></div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-4">
+<h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-lg">lightbulb</span>
+                            解決策の提案
+                        </h3>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition-colors group">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors">1</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-800 dark:text-slate-200">センサー S-204 の清掃を実施</p>
+<p class="text-xs text-slate-500">微細な塵による誤検知を解消します（所要時間: 2分）</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition-colors group">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors">2</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-800 dark:text-slate-200">SOP教育動画の再確認</p>
+<p class="text-xs text-slate-500">詰まり解消の標準手順を復習し、復旧時間を短縮します</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</section>
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">play_circle</span>
+                                ナレッジ動画
+                            </h3>
+<button class="text-xs text-primary font-bold hover:underline">全てのマニュアルを見る</button>
+</div>
+<div class="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 group cursor-pointer aspect-video bg-slate-900">
+<img alt="SOP Video" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgW6A6FfyZjhoqvkROO5G3lpWF_zUZ9Jkg6tneUUh00ey_BMVFxwCcVhTbpxLu3kLI5pH1rEoW2bPC8oEsupIev7Y9IDDyuwvPW3s0vgeXJFVin1c8eI3WACCkr4Mmi_falaxcysGoUzt6WtGWcSwEecU-l8TNBtMRazJQHtVuJY_WWXDLHAw_O3XZMQBdGv48v4Aqfyh0BnX9OPDcd75aR46U6Y5JjUmqoRGrqdji5lWacfNsZDeBzCALE9fW-LdDnL-4wjg40rQ"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 bg-white/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-sm font-bold">工程3: 詰まり発生時の標準復旧手順 (SOP-03-A)</p>
+<p class="text-white/70 text-[10px]">再生時間: 03:45 | 最終更新: 2023/08/12</p>
+</div>
+</div>
+</section>
+</div>
+<div class="col-span-5 space-y-6">
+<section class="bg-surface dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-sm">スキルマトリックス</h3>
+<span class="text-[10px] text-slate-400">現在シフト: Aチーム</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">ST</div>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-xs font-bold dark:text-white">佐藤 拓海 (当番)</span>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">要トレーニング</span>
+</div>
+<div class="flex gap-1">
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+<div class="h-1.5 flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+<div class="h-1.5 flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">YK</div>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-xs font-bold dark:text-white">山田 健一</span>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-green-100 text-green-700">エキスパート</span>
+</div>
+<div class="flex gap-1">
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-bold text-slate-900 dark:text-white text-sm">設備パラメータ</h3>
+<button class="flex items-center gap-1 text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined text-[14px]">history</span>
+                                History
+                            </button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase tracking-tight">Temperature</span>
+<span class="text-lg font-bold text-slate-800 dark:text-white">42.8 <span class="text-xs font-normal text-slate-400">℃</span></span>
+</div>
+<span class="material-symbols-outlined text-success">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30">
+<div class="flex flex-col">
+<span class="text-[10px] text-red-500 uppercase tracking-tight font-bold">Vibration Level</span>
+<span class="text-lg font-bold text-red-600 dark:text-red-400">8.4 <span class="text-xs font-normal text-red-400">mm/s</span></span>
+</div>
+<span class="material-symbols-outlined text-red-600 animate-pulse">warning</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase tracking-tight">Pressure</span>
+<span class="text-lg font-bold text-slate-800 dark:text-white">0.52 <span class="text-xs font-normal text-slate-400">MPa</span></span>
+</div>
+<span class="material-symbols-outlined text-success">check_circle</span>
+</div>
+</div>
+</section>
+<div class="p-4 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
+<span class="material-symbols-outlined text-slate-300 text-3xl">map</span>
+<p class="text-[10px] text-slate-400 font-medium">ライン内位置: セクション C-12</p>
+</div>
+</div>
+</div>
+</div>
+<div class="px-8 py-5 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex items-center justify-end gap-3 sticky bottom-0">
+<button class="px-5 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                閉じる
+            </button>
+<button class="px-5 py-2 rounded-lg text-sm font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">assignment_ind</span>
+                教育を割り当て
+            </button>
+<button class="px-6 py-2 rounded-lg text-sm font-bold bg-primary text-white shadow-md hover:bg-blue-600 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                対応完了
+            </button>
+</div>
+</div>
+</div>
+
+</body></html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>全ライン健康状態一覧 - VSM Dashboard</title>
+<!-- Fonts: Inter for numbers/English, Noto Sans JP for Japanese -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "status-green": "#10b981",
+                        "status-yellow": "#f59e0b",
+                        "status-red": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "sans": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-white overflow-x-hidden min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] dark:border-b-slate-700 bg-white dark:bg-[#1a2632] px-6 py-3 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">factory</span>
+</div>
+<h2 class="text-[#0d141b] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">VSM Dashboard</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<div class="hidden md:flex gap-2">
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg size-10 bg-[#e7edf3] dark:bg-slate-700 text-[#0d141b] dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg size-10 bg-[#e7edf3] dark:bg-slate-700 text-[#0d141b] dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-[#e7edf3] dark:border-slate-700">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-[#0d141b] dark:text-white">山田 太郎</p>
+<p class="text-xs text-[#4c739a] dark:text-slate-400">管理者 (Admin)</p>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-white shadow-sm" data-alt="User profile picture of a man in a suit" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC0LDqXtB9-dRVy2GNgLoSuln7BTo22F-tlMtj51IsWQVtG4CreDfCGk9NWfzofk5iWRLi8JKxBRSARkrPoqOM74t7y6MaIldznOQL5BPf4QKL9M9XE-Dqa4c4XycoS2EE6gitayzs_6fgt0rk_OogCECyV9UcuaN7-Eglo0Cut0QE4GqqlJDqmOPh8n6sAMhmht0hotTvxPcbWW6fpXyLEgcYXOolYQR_W2d2oY5kjGkkndIjboMuqoD50XGd3l0uvTdCfAD5GWCI");'></div>
+</div>
+</div>
+</header>
+<!-- Main Layout Container -->
+<main class="flex-1 px-4 md:px-10 py-8 max-w-[1440px] mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+<div class="flex flex-col gap-2">
+<h1 class="text-[#0d141b] dark:text-white tracking-tight text-[32px] font-bold leading-tight">全ライン健康状態一覧</h1>
+<div class="flex items-center gap-2 text-[#4c739a] dark:text-slate-400 text-sm font-medium">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>2023年10月24日 (火)</span>
+<span class="mx-2">|</span>
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span>現在のシフト: 08:00 - 17:00</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 h-10 px-4 bg-white dark:bg-slate-800 border border-[#cfdbe7] dark:border-slate-600 rounded-lg text-[#0d141b] dark:text-white text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+<span>フィルター</span>
+</button>
+<button class="flex items-center gap-2 h-10 px-4 bg-primary text-white rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors shadow-sm shadow-blue-200 dark:shadow-none">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>レポート出力</span>
+</button>
+</div>
+</div>
+<!-- KPI Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+<!-- Running -->
+<div class="flex flex-col gap-1 rounded-xl p-5 bg-white dark:bg-slate-800 border-l-4 border-status-green shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none">
+<div class="flex items-center justify-between">
+<p class="text-[#4c739a] dark:text-slate-400 text-sm font-medium">稼働中 (Running)</p>
+<span class="material-symbols-outlined text-status-green bg-green-50 dark:bg-green-900/30 p-1 rounded-full text-lg">check_circle</span>
+</div>
+<p class="text-[#0d141b] dark:text-white text-3xl font-bold leading-tight mt-1">3 <span class="text-sm font-normal text-[#4c739a] dark:text-slate-400">ライン</span></p>
+</div>
+<!-- Warning -->
+<div class="flex flex-col gap-1 rounded-xl p-5 bg-white dark:bg-slate-800 border-l-4 border-status-yellow shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none">
+<div class="flex items-center justify-between">
+<p class="text-[#4c739a] dark:text-slate-400 text-sm font-medium">注意 (Warning)</p>
+<span class="material-symbols-outlined text-status-yellow bg-yellow-50 dark:bg-yellow-900/30 p-1 rounded-full text-lg">warning</span>
+</div>
+<p class="text-[#0d141b] dark:text-white text-3xl font-bold leading-tight mt-1">1 <span class="text-sm font-normal text-[#4c739a] dark:text-slate-400">ライン</span></p>
+</div>
+<!-- Stopped -->
+<div class="flex flex-col gap-1 rounded-xl p-5 bg-white dark:bg-slate-800 border-l-4 border-status-red shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none">
+<div class="flex items-center justify-between">
+<p class="text-[#4c739a] dark:text-slate-400 text-sm font-medium">停止 (Stopped)</p>
+<span class="material-symbols-outlined text-status-red bg-red-50 dark:bg-red-900/30 p-1 rounded-full text-lg">error</span>
+</div>
+<p class="text-[#0d141b] dark:text-white text-3xl font-bold leading-tight mt-1">1 <span class="text-sm font-normal text-[#4c739a] dark:text-slate-400">ライン</span></p>
+</div>
+</div>
+<h2 class="text-[#0d141b] dark:text-white text-xl font-bold mb-5 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_view</span>
+            ライン別状況 (Line Status)
+        </h2>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1: Green (Healthy) -->
+<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 border border-slate-100 dark:border-slate-700">
+<div class="h-2 w-full bg-status-green"></div>
+<div class="p-5 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-[#0d141b] dark:text-white">ライン 1</h3>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">正常</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Main Assembly A</p>
+</div>
+<div class="size-10 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-6">
+<!-- Metric 1 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">speed</span> スループット
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">1,250 <span class="text-xs font-normal text-slate-500">個/h</span></p>
+</div>
+<!-- Metric 2 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 直行率
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">98.5 <span class="text-xs font-normal text-slate-500">%</span></p>
+</div>
+<!-- Metric 3 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span> 仕掛品在庫
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">450 <span class="text-xs font-normal text-slate-500">個</span></p>
+</div>
+<!-- Metric 4 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span> 損失金額
+                            </p>
+<p class="text-xl font-bold text-slate-400">¥0</p>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full flex items-center justify-center gap-2 h-9 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors">
+<span>詳細を見る</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Red (Stopped - Critical) -->
+<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 border border-slate-100 dark:border-slate-700 ring-1 ring-red-100 dark:ring-red-900/30">
+<div class="h-2 w-full bg-status-red"></div>
+<div class="p-5 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-[#0d141b] dark:text-white">ライン 2</h3>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300">停止</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Welding Process B</p>
+</div>
+<div class="size-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 animate-pulse">
+<span class="material-symbols-outlined">error</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-6">
+<!-- Metric 1 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">speed</span> スループット
+                            </p>
+<p class="text-xl font-bold text-status-red">0 <span class="text-xs font-normal text-slate-500">個/h</span></p>
+</div>
+<!-- Metric 2 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 直行率
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">-- <span class="text-xs font-normal text-slate-500">%</span></p>
+</div>
+<!-- Metric 3 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span> 仕掛品在庫
+                            </p>
+<p class="text-xl font-bold text-status-yellow">850 <span class="text-xs font-normal text-slate-500">個</span></p>
+</div>
+<!-- Metric 4 (Critical KPI) -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span> 損失金額
+                            </p>
+<p class="text-xl font-bold text-status-red">¥450,000</p>
+</div>
+</div>
+<div class="bg-red-50 dark:bg-red-900/20 rounded p-2 mb-4 flex items-start gap-2">
+<span class="material-symbols-outlined text-status-red text-sm mt-0.5">info</span>
+<p class="text-xs text-red-800 dark:text-red-200">機械故障: ロボットアーム応答なし (Machine Failure)</p>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full flex items-center justify-center gap-2 h-9 rounded-lg bg-status-red text-white text-sm font-bold hover:bg-red-600 transition-colors shadow-sm shadow-red-200 dark:shadow-none">
+<span>緊急対応</span>
+<span class="material-symbols-outlined text-[16px]">warning</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Yellow (Warning) -->
+<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 border border-slate-100 dark:border-slate-700">
+<div class="h-2 w-full bg-status-yellow"></div>
+<div class="p-5 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-[#0d141b] dark:text-white">ライン 3</h3>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300">注意</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Packaging Unit C</p>
+</div>
+<div class="size-10 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">conveyor_belt</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-6">
+<!-- Metric 1 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">speed</span> スループット
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">980 <span class="text-xs font-normal text-slate-500">個/h</span></p>
+</div>
+<!-- Metric 2 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 直行率
+                            </p>
+<p class="text-xl font-bold text-status-yellow">89.2 <span class="text-xs font-normal text-slate-500">%</span></p>
+</div>
+<!-- Metric 3 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span> 仕掛品在庫
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">520 <span class="text-xs font-normal text-slate-500">個</span></p>
+</div>
+<!-- Metric 4 -->
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span> 損失金額
+                            </p>
+<p class="text-xl font-bold text-status-yellow">¥45,000</p>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full flex items-center justify-center gap-2 h-9 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors">
+<span>詳細を見る</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Green -->
+<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 border border-slate-100 dark:border-slate-700">
+<div class="h-2 w-full bg-status-green"></div>
+<div class="p-5 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-[#0d141b] dark:text-white">ライン 4</h3>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">正常</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Component Assembly</p>
+</div>
+<div class="size-10 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-6">
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">speed</span> スループット
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">1,100 <span class="text-xs font-normal text-slate-500">個/h</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 直行率
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">99.1 <span class="text-xs font-normal text-slate-500">%</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span> 仕掛品在庫
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">320 <span class="text-xs font-normal text-slate-500">個</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span> 損失金額
+                            </p>
+<p class="text-xl font-bold text-slate-400">¥0</p>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full flex items-center justify-center gap-2 h-9 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors">
+<span>詳細を見る</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 5: Green -->
+<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 border border-slate-100 dark:border-slate-700">
+<div class="h-2 w-full bg-status-green"></div>
+<div class="p-5 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-[#0d141b] dark:text-white">ライン 5</h3>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">正常</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Final Inspection</p>
+</div>
+<div class="size-10 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">fact_check</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-6">
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">speed</span> スループット
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">1,320 <span class="text-xs font-normal text-slate-500">個/h</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 直行率
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">99.8 <span class="text-xs font-normal text-slate-500">%</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span> 仕掛品在庫
+                            </p>
+<p class="text-xl font-bold text-[#0d141b] dark:text-white">210 <span class="text-xs font-normal text-slate-500">個</span></p>
+</div>
+<div>
+<p class="text-xs text-[#4c739a] dark:text-slate-400 mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span> 損失金額
+                            </p>
+<p class="text-xl font-bold text-slate-400">¥0</p>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full flex items-center justify-center gap-2 h-9 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors">
+<span>詳細を見る</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-12 text-center text-xs text-[#4c739a] dark:text-slate-500 pb-8">
+<p>最終更新: 2023年10月24日 14:32:05 | システム状態: 正常</p>
+</footer>
+</main>
+</body></html>

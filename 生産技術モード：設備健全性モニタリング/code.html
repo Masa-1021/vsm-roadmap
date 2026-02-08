@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>生産技術モード：設備健全性モニタリング</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2633",
+                        "warning": "#f59e0b",
+                        "danger": "#ef4444",
+                        "success": "#10b981",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans JP", "sans-serif"],
+                        "body": ["Inter", "Noto Sans JP", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "md": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display h-screen w-full flex overflow-hidden">
+<!-- Left Sidebar -->
+<aside class="w-20 lg:w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between transition-all duration-300 z-20 shrink-0">
+<div class="flex flex-col">
+<!-- User Profile (Compact) -->
+<div class="p-4 lg:p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-700/50">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shrink-0 border border-slate-200" data-alt="Portrait of production engineer" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCMZRyoFJ56dxkbxo6rKMwIDsv3CcMrdTyaVV9kXlJIiGmgWeZbHMIHo-IrHaezE32a8gSN1cnYIGYHL2E_phg_n5IeguVM0fgBdXcIbGPkWJY5FLT0aM26BpZTIn1Oit4XYMf-bvaAWzt1oNtsCn6tjCFSun_KwecQUgwFUZJ5kMR8JiFDBceU0dQPaUVRhASUEyijkK3QV_mZEPeRKBJzW2Ka9a2vE1lQQPjhLe9BSEqLT-cUmLqUOibR2E6QTwZQwFdz5rRFPPY");'></div>
+<div class="hidden lg:flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-sm font-bold leading-normal">生産技術部</h1>
+<p class="text-slate-500 text-xs font-normal leading-normal">鈴木 健太</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2 p-3 mt-2">
+<a class="flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl lg:text-[22px] group-hover:text-primary">grid_view</span>
+<span class="hidden lg:block text-sm font-medium">ダッシュボード</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl lg:text-[22px] fill-1">precision_manufacturing</span>
+<span class="hidden lg:block text-sm font-bold">生産技術</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl lg:text-[22px] group-hover:text-primary">verified</span>
+<span class="hidden lg:block text-sm font-medium">品質管理</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl lg:text-[22px] group-hover:text-primary">build</span>
+<span class="hidden lg:block text-sm font-medium">保全計画</span>
+</a>
+</nav>
+</div>
+<div class="p-3 mb-2">
+<a class="flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl lg:text-[22px] group-hover:text-primary">settings</span>
+<span class="hidden lg:block text-sm font-medium">設定</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden">
+<!-- Header -->
+<header class="h-16 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 shrink-0 z-10">
+<div class="flex items-center gap-3">
+<h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">設備健全性モニタリング</h2>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-semibold border border-primary/20">リアルタイム</span>
+<span class="text-slate-400 text-sm ml-2">2023年10月24日 14:35</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    レポート出力
+                </button>
+<div class="relative">
+<span class="absolute top-0 right-0 size-2 bg-danger rounded-full border-2 border-white dark:border-slate-800"></span>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary">notifications</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-auto p-4 lg:p-6 bg-background-light dark:bg-background-dark">
+<div class="flex flex-col h-full gap-6">
+<!-- Top Section: VSM & Priority -->
+<div class="flex flex-col xl:flex-row gap-6 shrink-0 h-auto xl:h-[480px]">
+<!-- VSM Map (Main Focus) -->
+<div class="flex-1 flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
+<h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+                                生産ラインVSM (工程別詳細)
+                            </h3>
+<div class="flex items-center gap-4 text-xs font-medium">
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-success"></span>正常</div>
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-warning"></span>注意</div>
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-danger"></span>異常</div>
+</div>
+</div>
+<!-- VSM Flow Canvas -->
+<div class="flex-1 overflow-x-auto overflow-y-hidden p-6 relative bg-slate-50/50 dark:bg-slate-900/20">
+<div class="flex items-center h-full min-w-max px-4">
+<!-- Process 1: Press -->
+<div class="relative w-64 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm p-4 hover:shadow-md transition-shadow group">
+<div class="absolute -top-2 -right-2 bg-danger text-white size-6 flex items-center justify-center rounded-full shadow-md z-10 animate-pulse">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+</div>
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-slate-500 font-medium mb-0.5">工程 01</p>
+<h4 class="font-bold text-slate-800 dark:text-white">プレス加工</h4>
+<p class="text-xs text-slate-400">Press-A01</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">82<span class="text-sm text-slate-400 font-normal ml-0.5">%</span></span>
+<span class="text-[10px] text-slate-500">OEE</span>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div class="bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-100 dark:border-red-900/30">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">微小停止</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-danger">15</span>
+<span class="text-[10px] text-danger">回/時</span>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-700/50 p-2 rounded border border-slate-100 dark:border-slate-600">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">治具寿命</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-slate-700 dark:text-slate-200">92</span>
+<span class="text-[10px] text-slate-500">%</span>
+</div>
+</div>
+</div>
+<!-- Footer Status -->
+<div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700 flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-danger"></span>
+<span class="text-xs font-bold text-danger">チョコ停多発</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="w-12 h-px bg-slate-300 dark:bg-slate-600 relative mx-2">
+<span class="absolute right-0 -top-1 size-2 border-t border-r border-slate-300 dark:border-slate-600 rotate-45 transform"></span>
+</div>
+<!-- Process 2: Welding -->
+<div class="relative w-64 bg-white dark:bg-slate-800 rounded-lg border-l-4 border-l-warning border-y border-r border-slate-200 dark:border-slate-600 shadow-sm p-4 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-slate-500 font-medium mb-0.5">工程 02</p>
+<h4 class="font-bold text-slate-800 dark:text-white">溶接組立</h4>
+<p class="text-xs text-slate-400">Weld-Robo-B</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">94<span class="text-sm text-slate-400 font-normal ml-0.5">%</span></span>
+<span class="text-[10px] text-slate-500">OEE</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div class="bg-slate-50 dark:bg-slate-700/50 p-2 rounded border border-slate-100 dark:border-slate-600">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">微小停止</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-slate-700 dark:text-slate-200">2</span>
+<span class="text-[10px] text-slate-500">回/時</span>
+</div>
+</div>
+<div class="bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-100 dark:border-amber-900/30">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">チップ寿命</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-warning">12</span>
+<span class="text-[10px] text-warning">%</span>
+</div>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700 flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-warning"></span>
+<span class="text-xs font-bold text-warning">消耗品交換推奨</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="w-12 h-px bg-slate-300 dark:bg-slate-600 relative mx-2">
+<span class="absolute right-0 -top-1 size-2 border-t border-r border-slate-300 dark:border-slate-600 rotate-45 transform"></span>
+</div>
+<!-- Process 3: Painting -->
+<div class="relative w-64 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm p-4 hover:shadow-md transition-shadow opacity-60">
+<div class="absolute inset-0 bg-slate-100/50 dark:bg-slate-900/50 z-10 flex items-center justify-center backdrop-blur-[1px] rounded-lg">
+<span class="bg-slate-800 text-white text-xs px-2 py-1 rounded font-medium">メンテナンス中</span>
+</div>
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-slate-500 font-medium mb-0.5">工程 03</p>
+<h4 class="font-bold text-slate-800 dark:text-white">塗装・乾燥</h4>
+<p class="text-xs text-slate-400">Paint-Line-C</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">--<span class="text-sm text-slate-400 font-normal ml-0.5">%</span></span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2 opacity-50">
+<div class="bg-slate-50 p-2 rounded border border-slate-100">
+<p class="text-[10px] text-slate-500 mb-0.5">微小停止</p>
+<span class="text-lg font-bold text-slate-400">-</span>
+</div>
+<div class="bg-slate-50 p-2 rounded border border-slate-100">
+<p class="text-[10px] text-slate-500 mb-0.5">フィルタ</p>
+<span class="text-lg font-bold text-slate-400">-</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-slate-100 flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-slate-400"></span>
+<span class="text-xs font-bold text-slate-500">停止</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="w-12 h-px bg-slate-300 dark:bg-slate-600 relative mx-2">
+<span class="absolute right-0 -top-1 size-2 border-t border-r border-slate-300 dark:border-slate-600 rotate-45 transform"></span>
+</div>
+<!-- Process 4: Assembly -->
+<div class="relative w-64 bg-white dark:bg-slate-800 rounded-lg border-l-4 border-l-success border-y border-r border-slate-200 dark:border-slate-600 shadow-sm p-4 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-slate-500 font-medium mb-0.5">工程 04</p>
+<h4 class="font-bold text-slate-800 dark:text-white">最終組立</h4>
+<p class="text-xs text-slate-400">Assy-Final-D</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">98<span class="text-sm text-slate-400 font-normal ml-0.5">%</span></span>
+<span class="text-[10px] text-slate-500">OEE</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div class="bg-slate-50 dark:bg-slate-700/50 p-2 rounded border border-slate-100 dark:border-slate-600">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">微小停止</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-success">0</span>
+<span class="text-[10px] text-slate-500">回/時</span>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-700/50 p-2 rounded border border-slate-100 dark:border-slate-600">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">トルク値</p>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-success">OK</span>
+</div>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700 flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-success"></span>
+<span class="text-xs font-bold text-success">順調に稼働中</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Maintenance Priority -->
+<div class="w-full xl:w-80 flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm shrink-0">
+<div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/50 rounded-t-xl">
+<h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">psychology</span>
+                                保全優先度 (AI分析)
+                            </h3>
+</div>
+<div class="p-4 flex flex-col gap-3 overflow-y-auto max-h-[400px]">
+<!-- Priority Item 1: High -->
+<div class="p-3 rounded-lg border border-red-200 bg-red-50/50 dark:bg-red-900/10 dark:border-red-900/30 flex flex-col gap-2 hover:bg-red-50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-xl">error</span>
+<span class="text-xs font-bold text-danger uppercase tracking-wider">緊急対応</span>
+</div>
+<span class="text-[10px] font-medium text-slate-400">AI確度: 98%</span>
+</div>
+<h4 class="text-sm font-bold text-slate-800 dark:text-white">Press-A01: フィーダー詰まり兆候</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                    センサー波形に異常パターン検出。30分以内の停止リスク高。
+                                </p>
+<button class="mt-1 w-full py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded text-xs font-medium text-slate-700 dark:text-slate-300 shadow-sm group-hover:border-red-200 group-hover:text-danger transition-all">詳細データを確認</button>
+</div>
+<!-- Priority Item 2: Medium -->
+<div class="p-3 rounded-lg border border-amber-200 bg-amber-50/50 dark:bg-amber-900/10 dark:border-amber-900/30 flex flex-col gap-2 hover:bg-amber-50 transition-colors cursor-pointer">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-warning text-xl">schedule</span>
+<span class="text-xs font-bold text-warning uppercase tracking-wider">要計画</span>
+</div>
+<span class="text-[10px] font-medium text-slate-400">AI確度: 85%</span>
+</div>
+<h4 class="text-sm font-bold text-slate-800 dark:text-white">Weld-Robo-B: チップ摩耗</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                    残り寿命12%。次回の休憩時間での交換を推奨します。
+                                </p>
+</div>
+<!-- Priority Item 3: Low -->
+<div class="p-3 rounded-lg border border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700 flex flex-col gap-2 hover:border-primary/50 transition-colors cursor-pointer opacity-80 hover:opacity-100">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">trending_up</span>
+<span class="text-xs font-bold text-primary uppercase tracking-wider">改善提案</span>
+</div>
+<span class="text-[10px] font-medium text-slate-400">AI確度: 70%</span>
+</div>
+<h4 class="text-sm font-bold text-slate-800 dark:text-white">Assy-Final-D: サイクルタイム短縮</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                    待機時間が微増傾向。搬送タイミングの見直しで+2%改善可能。
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Timeline -->
+<div class="flex-1 min-h-[300px] bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500">history</span>
+                            設備稼働タイムライン (08:00 - 16:00)
+                        </h3>
+<div class="flex items-center gap-4 text-xs">
+<div class="flex items-center gap-2"><span class="w-4 h-3 bg-success rounded-sm"></span>稼働</div>
+<div class="flex items-center gap-2"><span class="w-4 h-3 bg-slate-300 rounded-sm"></span>待機</div>
+<div class="flex items-center gap-2"><span class="w-4 h-3 bg-danger rounded-sm"></span>停止・異常</div>
+<div class="flex items-center gap-2"><span class="w-4 h-3 bg-warning rounded-sm"></span>段取り</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 relative flex-1">
+<!-- Time Scale -->
+<div class="flex ml-32 border-b border-slate-200 dark:border-slate-700 pb-2 text-xs text-slate-400 font-medium">
+<div class="flex-1 text-left">08:00</div>
+<div class="flex-1 text-left">09:00</div>
+<div class="flex-1 text-left">10:00</div>
+<div class="flex-1 text-left">11:00</div>
+<div class="flex-1 text-left">12:00</div>
+<div class="flex-1 text-left">13:00</div>
+<div class="flex-1 text-left">14:00</div>
+<div class="flex-1 text-left">15:00</div>
+</div>
+<!-- Grid Lines Background -->
+<div class="absolute top-8 bottom-0 left-32 right-0 flex pointer-events-none z-0">
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+<div class="flex-1 border-l border-dashed border-slate-100 dark:border-slate-700"></div>
+</div>
+<!-- Row 1: Press -->
+<div class="flex items-center group z-10 relative">
+<div class="w-32 shrink-0 pr-4">
+<p class="text-sm font-bold text-slate-800 dark:text-white">Press-A01</p>
+<p class="text-[10px] text-slate-500">プレス工程</p>
+</div>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden relative">
+<!-- Bars -->
+<div class="h-full bg-success w-[20%] hover:brightness-110 cursor-pointer relative group/bar">
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover/bar:block bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50">稼働: 08:00-09:30</div>
+</div>
+<div class="h-full bg-danger w-[2%] hover:brightness-110 cursor-pointer relative group/bar">
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover/bar:block bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50">異常停止: 09:30-09:40</div>
+</div>
+<div class="h-full bg-success w-[15%]"></div>
+<div class="h-full bg-slate-300 w-[5%]"></div> <!-- Break -->
+<div class="h-full bg-success w-[25%]"></div>
+<div class="h-full bg-warning w-[8%] relative group/bar">
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover/bar:block bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50">型交換: 13:00-13:40</div>
+</div>
+<div class="h-full bg-danger w-[5%] hover:brightness-110 cursor-pointer border-x-2 border-white dark:border-slate-800 relative group/bar">
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover/bar:block bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50">微小停止多発エリア</div>
+</div>
+<div class="h-full bg-success w-[20%]"></div>
+</div>
+</div>
+<!-- Row 2: Welding -->
+<div class="flex items-center group z-10 relative">
+<div class="w-32 shrink-0 pr-4">
+<p class="text-sm font-bold text-slate-800 dark:text-white">Weld-Robo-B</p>
+<p class="text-[10px] text-slate-500">溶接組立</p>
+</div>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden">
+<div class="h-full bg-success w-[40%]"></div>
+<div class="h-full bg-slate-300 w-[5%]"></div>
+<div class="h-full bg-success w-[30%]"></div>
+<div class="h-full bg-slate-300 w-[10%]"></div> <!-- Idle waiting for Press -->
+<div class="h-full bg-success w-[15%]"></div>
+</div>
+</div>
+<!-- Row 3: Painting -->
+<div class="flex items-center group z-10 relative">
+<div class="w-32 shrink-0 pr-4">
+<p class="text-sm font-bold text-slate-800 dark:text-white">Paint-Line-C</p>
+<p class="text-[10px] text-slate-500">塗装・乾燥</p>
+</div>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden">
+<div class="h-full bg-success w-[42%]"></div>
+<div class="h-full bg-slate-300 w-[5%]"></div>
+<div class="h-full bg-slate-300 w-[53%] flex items-center justify-center">
+<span class="text-[10px] text-slate-500 font-medium">計画メンテナンス</span>
+</div>
+</div>
+</div>
+<!-- Row 4: Assembly -->
+<div class="flex items-center group z-10 relative">
+<div class="w-32 shrink-0 pr-4">
+<p class="text-sm font-bold text-slate-800 dark:text-white">Assy-Final-D</p>
+<p class="text-[10px] text-slate-500">最終組立</p>
+</div>
+<div class="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded flex overflow-hidden">
+<div class="h-full bg-success w-[45%]"></div>
+<div class="h-full bg-slate-300 w-[5%]"></div>
+<div class="h-full bg-success w-[50%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
